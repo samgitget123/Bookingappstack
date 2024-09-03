@@ -55,6 +55,23 @@ const Booknow = () => {
   };
 
   const handleBooking = () => {
+    // Generate a unique booking ID (for demonstration purposes)
+    const bookingId = `BK${new Date().getTime()}`;
+
+    // Create the booking data JSON
+    const bookingData = {
+      bookingId: bookingId,
+      groundName: bookingid,
+      slots: selectedSlots.map(slot => ({
+        slotTime: slot,
+        isBooked: true
+      }))
+    };
+
+    // Output booking data to console (or send to server)
+    console.log('Booking Data:', bookingData);
+
+    // Update the booked slots state
     setBookedSlots([...bookedSlots, ...selectedSlots]);
     setSelectedSlots([]); // Clear selected slots after booking
   };

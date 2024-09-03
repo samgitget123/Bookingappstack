@@ -69,9 +69,8 @@ router.get('/grounds', async (req, res) => {
 //Get Ground Details By Ground Id
 router.get('/ground/:ground_id', async (req, res) => {
     try {
-        console.log('Received ground_id:', ground_id);
-      const { ground_id } = req.params;
-      console.log('Received ground_id:', ground_id);
+     
+      const {ground_id} = req.params;;
       // Find the ground by ground ID
       const ground = await Ground.findOne({ ground_id });
       if (!ground) {

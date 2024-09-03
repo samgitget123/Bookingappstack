@@ -5,7 +5,12 @@ const Ground = require('../models/Ground');
 const {generateBookingID} = require('../Utils');
 
 router.post('/book-slot', async (req, res) => {
-    const { ground_id, date, slots , comboPack  } = req.body;
+    // const { ground_id, date, slots , comboPack  } = req.body;
+    console.log("Request body:", req.body); // Log the entire request body
+
+    const { ground_id, date, slots, comboPack } = req.body;
+
+    console.log("Extracted values - ground_id:", ground_id, "date:", date, "slots:", slots, "comboPack:", comboPack);
     try {
       // Calculate the price based on the number of slots booked
       const pricePerHour = 800; 

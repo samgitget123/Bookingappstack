@@ -3,6 +3,7 @@ require('dotenv').config();
 
 // Import required packages
 const express = require('express');
+const cors = require('cors');
 const connectDB = require('./config/db');  // Adjust the path if connectDB.js is in a different location
 
 // Create an instance of an Express application
@@ -11,6 +12,7 @@ const app = express();
 // Middleware to parse JSON bodies
 app.use(express.json());
 
+app.use(cors()); // Enable CORS for all routes
 // Connect to the database
 connectDB();
 

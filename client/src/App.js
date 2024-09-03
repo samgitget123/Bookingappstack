@@ -5,7 +5,7 @@ import ViewGround from './Components/Sections/ViewGround';
 import Booknow from './Components/Sections/Booknow';
 //redux
 import { Provider } from 'react-redux';
-import { store } from './Store';
+import store  from './store';
 //routing
 import { BrowserRouter as Router , Routes , Route } from 'react-router-dom';
 //css
@@ -18,7 +18,7 @@ const App = () => {
         <Header/>
           <Routes>
             <Route path="/" element={<Home />}/>
-            <Route path="/viewground/:id" element={<ViewGround />}/>
+            <Route path="/viewground/:gid" element={<ViewGround />}/>
             <Route path="/booking/:bookingid" element={<Booknow />}/>
           </Routes>
         </Router>

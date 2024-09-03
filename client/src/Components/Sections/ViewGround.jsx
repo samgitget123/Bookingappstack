@@ -1,50 +1,121 @@
-import React from 'react';
-import { useLocation, useParams, useNavigate } from 'react-router-dom';
-//images
+import React, { useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchGroundDetails } from '../../Features/groundSlice';
 import groundImage from '../../Images/turf.jpeg';
 
+// Helper function to format slot times
+const formatSlot = (slot) => {
+  const [hours, minutes] = slot.split('.').map(Number);
+  const startHours = Math.floor(hours);
+  const startMinutes = (minutes === 0) ? 0 : 30;
+  const endHours = (startMinutes === 0) ? startHours : startHours + 1;
+  const endMinutes = (startMinutes === 0) ? 30 : 0;
+
+  return `${String(startHours).padStart(2, '0')}:${String(startMinutes).padStart(2, '0')} - ${String(endHours).padStart(2, '0')}:${String(endMinutes).padStart(2, '0')}`;
+};
+
 const ViewGround = () => {
+  const { gid } = useParams();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
-  const { id } = useParams();  // Groundname
-  const playground = location.state;  // playground state
+  const groundState = useSelector((state) => state.ground || {});
+  const { ground, loading, error } = groundState;
+
+  useEffect(() => {
+    if (gid) {
+      dispatch(fetchGroundDetails(gid)); // Use gid from params
+    }
+  }, [dispatch, gid]);
 
   const handleBookClick = () => {
-    const bookingId = 100001; // Example booking ID
-    navigate(`/booking/${bookingId}`);
+    navigate(`/booking/${gid}`);
   };
 
-  console.log(id, 'id it is');
-  console.log(playground, 'playground');
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!ground) return <div>No ground data available</div>;
+
+  // Destructure properties from ground object
+  const { name, location, data, slots } = ground;
+  const imageUrl = data?.image || groundImage;
+  const description = data?.desc || 'No Description';
+  const bookedSlots = slots?.booked || [];
+  const allSlots = ['6.0', '6.5', '7.0', '7.5', '8.0', '8.5', '9.0', '9.5', '10.0', '10.5', '11.0', '11.5', '12.0', '12.5'];
+  const bookedSlotTimes = bookedSlots.map(formatSlot);
+  const availableSlots = allSlots.filter(slot => !bookedSlots.includes(slot)).map(formatSlot);
 
   return (
-    <>
-      <section className='viewgroundsection my-5'>
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-              <div className='image-container'>
-                <img src={groundImage} alt="ground" className='ground-image img-fluid' />
-              </div>
+    <section className='viewgroundsection my-5'>
+      <div className="container">
+        <div className="row">
+          <div className="col-lg-3 col-md-12 col-sm-12 col-xs-12 mb-3">
+            <div className='image-container'>
+              <img src={imageUrl} alt="ground" className='ground-image img-fluid' />
             </div>
-            <div className="col-lg-9 col-md-12 col-sm-12 col-xs-12 d-flex flex-column justify-content-between">
-              <div>
-                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo magnam necessitatibus nobis doloribus delectus, harum labore, cumque expedita quasi veniam amet beatae et nostrum explicabo!</p>
-              </div>
-              <div>
-                <button 
-                  type="button" 
-                  className="btn btn-danger btn-lg" 
-                  onClick={handleBookClick} // Use function reference here
-                >
-                  Book Now
-                </button>
+          </div>
+          <div className="col-lg-9 col-md-12 col-sm-6 col-xs-12 d-flex flex-column justify-content-between">
+            <div>
+              <h5>{name || 'No Name'}</h5>
+              <p>Location: {location || 'No Location'}</p>
+              <p>Description: {description}</p>
+              <div className="row">
+              <div className="col-md-3 col-sm-6 col-12 mb-3">
+                  <h6>Available Slots:</h6>
+                  <ul className="list-unstyled">
+                    {availableSlots.length > 0 ? (
+                      availableSlots.map((slot, index) => (
+                        <li key={index}>
+                            <button
+                            type="button"
+                            className="btn btn-primary btn-sm m-1"
+                            onClick={() => console.log(slot)}
+                          >
+                            {slot}
+                          </button>
+                        </li>
+                      ))
+                    ) : (
+                      <li>No available slots</li>
+                    )}
+                  </ul>
+                </div>
+                <div className="col-md-3 col-sm-6 col-12 mb-3">
+                  <h6>Booked Slots:</h6>
+                  <ul className="list-unstyled">
+                    {bookedSlotTimes.length > 0 ? (
+                      bookedSlotTimes.map((slot, index) => (
+                        <li key={index}>
+                           <button
+                            type="button"
+                            className="btn btn-secondary btn-sm m-1"
+                            disabled
+                          >
+                            {slot}
+                          </button>
+                        </li>
+                      ))
+                    ) : (
+                      <li>No booked slots</li>
+                    )}
+                  </ul>
+                </div>
+                <div className='col-md-3 col-12 mb-3'>
+                <button
+                type="button"
+                className="btn btn-danger btn-lg"
+                onClick={handleBookClick}
+              >
+                Book Now
+              </button>
+                </div>
+              
               </div>
             </div>
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 };
 
