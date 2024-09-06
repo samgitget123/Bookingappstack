@@ -128,6 +128,70 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+// const initialState = {
+//   cities: [
+//     {
+//       city: "Mumbai",
+//       addresses: [
+//         {
+//           country: "India",
+//           state: "Telangana",
+//           district: "Rangareddy",
+//           area: "Badangpet",
+//           playgrounds: [
+//             { name: "Vkings sportz arena", slots: 5 },
+//             { name: "Fusion The Turf", slots: 3 }
+//           ]
+//         },
+//         {
+//           country: "India",
+//           state: "Maharashtra",
+//           district: "Mumbai Suburban",
+//           area: "Bandra",
+//           playgrounds: [
+//             { name: "Bandra Fort Ground", slots: 4 }
+//           ]
+//         }
+//       ]
+//     },
+//     {
+//       city: "Delhi",
+//       addresses: [
+//         {
+//           country: "India",
+//           state: "Delhi",
+//           district: "New Delhi",
+//           area: "Connaught Place",
+//           playgrounds: [
+//             { name: "Central Park", slots: 6 }
+//           ]
+//         }
+//       ]
+//     },
+//     {
+//       city: "Hyderabad",
+//       addresses: [
+//         {
+//           country: "India",
+//           state: "Telangana",
+//           district: "Hyderabad",
+//           area: "Banjara Hills",
+//           playgrounds: [
+//             // Playgrounds for this area
+//           ]
+//         }
+//       ]
+//     },
+//     // Add more cities as needed
+//   ],
+//   selectedCity: '',
+//   selectedArea: '',
+//   filteredPlaygrounds: [],
+//   searchQuery: '',
+//   loading: false, // Add loading state
+//   error: null,    // Add error state
+// };
+
 const initialState = {
   cities: [
     {
@@ -135,22 +199,21 @@ const initialState = {
       addresses: [
         {
           country: "India",
-          state: "Telangana",
-          district: "Rangareddy",
-          area: "Badangpet",
-          playgrounds: [
-            { name: "Vkings sportz arena", slots: 5 },
-            { name: "Fusion The Turf", slots: 3 }
-          ]
+          state: "Maharashtra",
+          district: "Mumbai Suburban",
+          area: "Bandra",
         },
         {
           country: "India",
           state: "Maharashtra",
           district: "Mumbai Suburban",
-          area: "Bandra",
-          playgrounds: [
-            { name: "Bandra Fort Ground", slots: 4 }
-          ]
+          area: "Kurla",
+        },
+        {
+          country: "India",
+          state: "Maharashtra",
+          district: "Mumbai Suburban",
+          area: "Andheri",
         }
       ]
     },
@@ -162,9 +225,64 @@ const initialState = {
           state: "Delhi",
           district: "New Delhi",
           area: "Connaught Place",
-          playgrounds: [
-            { name: "Central Park", slots: 6 }
-          ]
+        },
+        {
+          country: "India",
+          state: "Delhi",
+          district: "South Delhi",
+          area: "Hauz Khas",
+        },
+        {
+          country: "India",
+          state: "Delhi",
+          district: "North Delhi",
+          area: "Karol Bagh",
+        }
+      ]
+    },
+    {
+      city: "Bengaluru",
+      addresses: [
+        {
+          country: "India",
+          state: "Karnataka",
+          district: "Bengaluru Urban",
+          area: "Whitefield",
+        },
+        {
+          country: "India",
+          state: "Karnataka",
+          district: "Bengaluru Urban",
+          area: "Koramangala",
+        },
+        {
+          country: "India",
+          state: "Karnataka",
+          district: "Bengaluru Urban",
+          area: "Indiranagar",
+        }
+      ]
+    },
+    {
+      city: "Chennai",
+      addresses: [
+        {
+          country: "India",
+          state: "Tamil Nadu",
+          district: "Chennai",
+          area: "T. Nagar",
+        },
+        {
+          country: "India",
+          state: "Tamil Nadu",
+          district: "Chennai",
+          area: "Adyar",
+        },
+        {
+          country: "India",
+          state: "Tamil Nadu",
+          district: "Chennai",
+          area: "Velachery",
         }
       ]
     },
@@ -176,9 +294,64 @@ const initialState = {
           state: "Telangana",
           district: "Hyderabad",
           area: "Banjara Hills",
-          playgrounds: [
-            // Playgrounds for this area
-          ]
+        },
+        {
+          country: "India",
+          state: "Telangana",
+          district: "Hyderabad",
+          area: "Jubilee Hills",
+        },
+        {
+          country: "India",
+          state: "Telangana",
+          district: "Hyderabad",
+          area: "Gachibowli",
+        }
+      ]
+    },
+    {
+      city: "Kolkata",
+      addresses: [
+        {
+          country: "India",
+          state: "West Bengal",
+          district: "Kolkata",
+          area: "Park Street",
+        },
+        {
+          country: "India",
+          state: "West Bengal",
+          district: "Kolkata",
+          area: "Salt Lake",
+        },
+        {
+          country: "India",
+          state: "West Bengal",
+          district: "Kolkata",
+          area: "Howrah",
+        }
+      ]
+    },
+    {
+      city: "Pune",
+      addresses: [
+        {
+          country: "India",
+          state: "Maharashtra",
+          district: "Pune",
+          area: "Kothrud",
+        },
+        {
+          country: "India",
+          state: "Maharashtra",
+          district: "Pune",
+          area: "Viman Nagar",
+        },
+        {
+          country: "India",
+          state: "Maharashtra",
+          district: "Pune",
+          area: "Hinjewadi",
         }
       ]
     },
@@ -192,19 +365,6 @@ const initialState = {
   error: null,    // Add error state
 };
 
-// Async thunk for fetching grounds based on location
-// export const fetchPlaygrounds = createAsyncThunk(
-//   'city/fetchPlaygrounds',
-//   async (location, thunkAPI) => {
-//     try {
-//       const response = await axios.get(`http://localhost:5000/grounds?location=${location}`);
-//       console.log(response.data , 'APIRESPONSE');
-//       return response.data; // Assume response is an array of playgrounds
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error.response.data || error.message);
-//     }
-//   }
-// );
 export const fetchPlaygrounds = createAsyncThunk(
   'city/fetchPlaygrounds',
   async (location, thunkAPI) => {

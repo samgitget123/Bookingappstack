@@ -113,18 +113,107 @@ import banner from '../../Images/turf.jpeg';
 const Herosection = () => {
   const dispatch = useDispatch();
   const { cities, selectedCity, selectedArea, loading, error } = useSelector(state => state.city);
-
+console.log('cities' , selectedCity)
   const handleCityChange = (event) => {
     const city = event.target.value;
     dispatch(selectCity(city));
     if (city) {
-      dispatch(fetchPlaygrounds('Hyderabad')); // Fetch data when city is selected
+      dispatch(fetchPlaygrounds(city)); // Fetch data when city is selected
     }
   };
 
   const handleAreaChange = (event) => {
     dispatch(selectArea(event.target.value));
   };
+  const handleGetCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const { latitude, longitude } = position.coords;
+        try {
+          const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1`);
+          const data = await response.json();
+  
+          console.log('API Response:', data); // Inspect the full API response for debugging
+  
+          // Extract city and area, handling cases where city might be missing
+          const city = data.address.city || data.address.town || data.address.village || data.address.hamlet || data.address.state || 'Unknown City';
+          const area = data.address.neighbourhood || data.address.suburb || data.address.road || data.address.footway || 'Unknown Area';
+  
+          console.log('Current location:', { latitude, longitude, city, area });
+  
+          // Set city and area in state
+          dispatch(selectCity(city));
+          dispatch(selectArea(area));
+  
+          // Optionally, trigger a fetch for playgrounds or related data based on the selected city
+          if (city && city !== 'Unknown City') {
+            dispatch(fetchPlaygrounds(city));
+          }
+  
+        } catch (error) {
+          console.error('Error with reverse geocoding:', error);
+        }
+      }, (error) => {
+        console.error('Error getting location:', error);
+      });
+    } else {
+      console.error('Geolocation is not supported by this browser.');
+    }
+  };
+  
+  // const handleGetCurrentLocation = () => {
+  //   if (navigator.geolocation) {
+  //     navigator.geolocation.getCurrentPosition(async (position) => {
+  //       const { latitude, longitude } = position.coords;
+  //       try {
+  //         const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1`);
+  //         const data = await response.json();
+  
+  //         console.log('API Response:', data); // Inspect the full API response for debugging
+  
+  //         // Try to extract city and area from different fields
+  //         const city = data.address.city || data.address.town || data.address.village || data.address.hamlet;
+  //         const area = data.address.suburb || data.address.neighbourhood || data.address.road || data.address.footway;
+  
+  //         console.log('Current location:', { latitude, longitude, city, area });
+  
+  //         // Set city and area in state
+  //         dispatch(selectCity(city || 'Unknown'));
+  //         dispatch(selectArea(area || 'Unknown'));
+  //       } catch (error) {
+  //         console.error('Error with reverse geocoding:', error);
+  //       }
+  //     }, (error) => {
+  //       console.error('Error getting location:', error);
+  //     });
+  //   } else {
+  //     console.error('Geolocation is not supported by this browser.');
+  //   }
+  // };
+  
+  // const handleGetCurrentLocation = () => {
+  //   if (navigator.geolocation) {
+  //     navigator.geolocation.getCurrentPosition(async (position) => {
+  //       const { latitude, longitude } = position.coords;
+  //       // Use a reverse geocoding API to get city and area from latitude and longitude
+  //       const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1`);
+  //       const data = await response.json();
+  //       console.log('location : ' , data);
+  //       const city = data.address.city || data.address.town || data.address.village;
+  //       const area = data.address.suburb || data.address.neighbourhood || data.address.road;
+
+  //       console.log('Current location:', { latitude, longitude, city, area });
+
+  //       // Set city and area in state
+  //       dispatch(selectCity(city));
+  //       dispatch(selectArea(area));
+  //     }, (error) => {
+  //       console.error('Error getting location:', error);
+  //     });
+  //   } else {
+  //     console.error('Geolocation is not supported by this browser.');
+  //   }
+  // };
 
   return (
     <>
@@ -157,6 +246,11 @@ const Herosection = () => {
                     ))}
                   </select>
                 </form>
+                <div className='my-3'>
+                  <button className="btn btn-primary" onClick={handleGetCurrentLocation}>
+                    Use Current Location
+                  </button>
+                </div>
                 <div className='my-3'>
                   <h4 className='heading_caption'>Find Grounds <span className='text-warning'>@ Your Nearest</span></h4>
                 </div>
