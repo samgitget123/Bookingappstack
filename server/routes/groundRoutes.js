@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Ground = require('../models/Ground');
-
+const Booking = require('../models/Booking');
 
 //create new grounds 
 // Route to create a new ground
@@ -69,33 +69,96 @@ router.get('/grounds', async (req, res) => {
 //Get Ground Details By Ground Id
 router.get('/ground/:ground_id', async (req, res) => {
     try {
-     
-      const {ground_id} = req.params;;
-      // Find the ground by ground ID
-      const ground = await Ground.findOne({ ground_id });
-      if (!ground) {
-        return res.status(404).json({ message: 'Ground not found' });
-      }
-  
-      // Format the response according to the specified structure
-      const response = {
-        name: ground.name,
-        location: ground.location,
-        data: {
-          image: ground.photo,
-          desc: ground.description,
-        },
-        slots: {
-          booked: ground.slots.booked,
-        },
-      };
-  
-      res.json(response);
+        const { ground_id } = req.params;
+        const { date } = req.query;  // Use query parameter for date
+
+        // Find the ground by ground ID
+        const ground = await Ground.findOne({ ground_id });
+        console.log('groundData :' , ground);
+        if (!ground) {
+            return res.status(404).json({ message: 'Ground not found' });
+        }
+
+        // Set date to today if not provided
+        const selectedDate = date ? date : new Date().toISOString().split('T')[0]; 
+        console.log('Ground ID:', ground_id);
+        console.log('Selected Date:', selectedDate);
+        // Find the booking for the selected ground and date
+        const booking = await Booking.findOne({ ground_id, date: selectedDate });
+
+        console.log('bookings------ :' , booking);
+        //console.log(booking.slots , 'bookedslots')
+        const bookedSlots = booking ? booking.slots : [];
+        console.log('bookedslots :', bookedSlots);
+        // Format the response according to the specified structure
+        const response = {
+            name: ground.name,
+            location: ground.location,
+            data: {
+                image: ground.photo,
+                desc: ground.description,
+            },
+            slots: {
+                booked: bookedSlots,  // Based on booking data
+            },
+        };
+
+        // Send response only once
+        res.json(response);
     } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server error');
+        console.error(err.message);
+        res.status(500).send('Server error');
     }
-  });
+});
+
+// router.get('/ground/:ground_id', async (req, res) => {
+//     try {
+     
+//       const {ground_id } = req.params;
+//       const { date } = req.query;  // Use query parameter for date
+//       // Find the ground by ground ID
+//       const ground = await Ground.findOne({ ground_id });
+//       if (!ground) {
+//         return res.status(404).json({ message: 'Ground not found' });
+//       }
+//           // Set date to today if not provided
+//           const selectedDate = date ? date : new Date().toISOString().split('T')[0];
+
+//           // Find the booking for the selected ground and date
+//           const booking = await Booking.findOne({ ground_id, date: selectedDate });
+//           if (booking) {
+//             res.json({
+//                 groundId: booking.ground_id,
+//                 date: booking.date,
+//                 bookedSlots: booking.slots
+//             });
+//         } else {
+//             res.json({
+//                 ground_id,
+//                 date: selectedDate,
+//                 bookedSlots: []  // No slots booked for the selected date
+//             });
+//         }
+
+//       // Format the response according to the specified structure
+//       const response = {
+//         name: ground.name,
+//         location: ground.location,
+//         data: {
+//           image: ground.photo,
+//           desc: ground.description,
+//         },
+//         slots: {
+//           booked: ground.slots.booked,
+//         },
+//       };
+  
+//       res.json(response);
+//     } catch (err) {
+//       console.error(err.message);
+//       res.status(500).send('Server error');
+//     }
+//   });
   
 
 // Route to create a new ground

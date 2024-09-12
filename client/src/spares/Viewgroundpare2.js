@@ -5,8 +5,6 @@ import { fetchGroundDetails } from '../../Features/groundSlice';
 import groundImage from '../../Images/turf.jpeg';
 import axios from 'axios';
 
-//Modal
-import BookModal from '../Modals/BookModal';
 // Helper function to format slot times
 const formatSlot = (slot) => {
   const [hours, minutes] = slot.split('.').map(Number);
@@ -32,42 +30,31 @@ const ViewGround = () => {
   const groundState = useSelector((state) => state.ground || {});
   const { ground, loading, error } = groundState;
   const [selectedSlots, setSelectedSlots] = useState([]);
-  const [showModal, setShowModal] = useState(false);
+
   useEffect(() => {
     if (gid) {
       dispatch(fetchGroundDetails(gid)); // Use gid from params
     }
   }, [dispatch, gid]);
 
-  const confirnnowClick = () => {
-    setShowModal(true);
-  }
-  const handleCloseModal = () => {
-    setShowModal(false); // Close the modal
-  };
   const handleBookClick = async () => {
-    console.log('selectedSlots', selectedSlots);
     const slotsForAPI = selectedSlots.map(reverseFormatSlot);
     if (selectedSlots.length > 0) {
       const bookingData = {
-        ground_id: gid,            // Ground ID from route params
-        date: new Date().toISOString().slice(0, 10), // Current date in 'YYYY-MM-DD' format
-        slots: slotsForAPI,      // Selected slots
-        combopack: true            // Assuming you want combopack true, can be dynamic if needed
+        ground_id: gid,
+        date: new Date().toISOString().slice(0, 10),
+        slots: slotsForAPI,
+        combopack: true,
       };
 
       try {
         const response = await axios.post('http://localhost:5000/book-slot', bookingData);
-
         if (response.status === 200) {
-          console.log('Booking Successful:', response.data);
           navigate(`/booking/${gid}`);
         } else {
-          console.log('Booking Failed:', response.data);
           alert('Booking failed, please try again.');
         }
       } catch (error) {
-        console.error('Error during booking:', error);
         alert('An error occurred while booking. Please try again later.');
       }
     } else {
@@ -96,12 +83,71 @@ const ViewGround = () => {
   const availableSlots = allSlots.filter((slot) => !bookedSlots.includes(slot)).map(formatSlot);
 
   return (
-    <section className='viewgroundsection my-3'>
+    <section className='viewgroundsection my-5'>
       <div className="container">
         <div className="row">
-          {/* Ground details (visible for both desktop and mobile) */}
-          <div className="col-12 col-lg-8">
-            <h4>{name}</h4>
+          {/* Desktop view */}
+          <div className="col-lg-9">
+            <h5>{name || 'No Name'}</h5>
+            <p>Location: {location || 'No Location'}</p>
+            <p>Description: {description}</p>
+            <div className="d-flex justify-content-between">
+              <div className="w-50">
+                <h6>Available Slots:</h6>
+                <ul className="list-unstyled">
+                  {availableSlots.length > 0 ? (
+                    availableSlots.map((slot, index) => (
+                      <li key={index}>
+                        <button
+                          type="button"
+                          className={`btn btn-sm m-1 ${selectedSlots.includes(slot) ? 'btn-success' : 'btn-primary'}`}
+                          onClick={() => handleSlotClick(slot)}
+                        >
+                          {slot}
+                        </button>
+                      </li>
+                    ))
+                  ) : (
+                    <li>No available slots</li>
+                  )}
+                </ul>
+              </div>
+              <div className="w-50">
+                <h6>Booked Slots:</h6>
+                <ul className="list-unstyled">
+                  {bookedSlotTimes.length > 0 ? (
+                    bookedSlotTimes.map((slot, index) => (
+                      <li key={index}>
+                        <button
+                          type="button"
+                          className="btn btn-secondary btn-sm m-1"
+                          disabled
+                        >
+                          {slot}
+                        </button>
+                      </li>
+                    ))
+                  ) : (
+                    <li>No booked slots</li>
+                  )}
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          {/* Image for Desktop */}
+          <div className="col-lg-3 d-none d-lg-block text-center">
+            <img src={imageUrl} alt="ground" className="ground-image img-fluid mb-3" />
+          </div>
+
+          {/* Mobile view */}
+          <div className="col-12 d-lg-none mb-4">
+            <div className="text-center">
+              <img src={imageUrl} alt="ground" className="ground-image img-fluid mb-3" />
+            </div>
+            <h5>{name || 'No Name'}</h5>
+            <p>Location: {location || 'No Location'}</p>
+            <p>Description: {description}</p>
             <div className="d-flex justify-content-between">
               <div className="w-50 text-center">
                 <h6>Available Slots:</h6>
@@ -145,60 +191,17 @@ const ViewGround = () => {
               </div>
             </div>
           </div>
-
-          {/* Image for Desktop */}
-
-          <div className="col-lg-4 d-none d-lg-block text-center">
-
-            <div class="card w-100" >
-              <img src={imageUrl} alt="ground" className="ground-image img-fluid mb-3" />
-              <div class="card-body">
-                <h5 className='card-title'>{name || 'No Name'}</h5>
-                <h5 className='card-title'>Location: {location || 'No Location'}</h5>
-                <p class="card-text">{description}</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-              </div>
-            </div>
-          </div>
-
-          {/* Image for Mobile */}
-          <div className="col-12 d-lg-none d-sm-block d-md-block mb-4">
-            <div className=" text-center my-3">
-              <button
-                type="button"
-                className="btn btn-danger btn-lg w-100 "
-                onClick={confirnnowClick}
-              >
-                Confirm Now
-              </button>
-            </div>
-            <div className="text-center">
-              <div class="card w-100" >
-                <img src={imageUrl} alt="ground" className="ground-image img-fluid mb-3" />
-                <div class="card-body">
-                  <h5 className='card-title'>{name || 'No Name'}</h5>
-                  <h5 className='card-title'>Location: {location || 'No Location'}</h5>
-                  <p class="card-text">{description}</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
 
-
-        <div className="col-12 d-none d-lg-block text-center mt-3">
+        <div className="col-12 text-center mt-3">
           <button
             type="button"
             className="btn btn-danger btn-lg w-50"
-            onClick={confirnnowClick}
+            onClick={handleBookClick}
           >
             Confirm Now
           </button>
         </div>
-        {/* BookModal component */}
-        <BookModal showModal={showModal} handleCloseModal={handleCloseModal} />
-
       </div>
     </section>
   );
