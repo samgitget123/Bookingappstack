@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroundDetails } from '../../Features/groundSlice';
 import groundImage from '../../Images/turf.jpeg';
 import axios from 'axios';
-
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 //Modal
 import BookModal from '../Modals/BookModal';
 // Helper function to format slot times
@@ -24,6 +25,17 @@ const reverseFormatSlot = (formattedSlot) => {
   const [hours, minutes] = startTime.split(':').map(Number);
   return minutes === 0 ? `${hours}.0` : `${hours}.5`;
 };
+// Helper function to format date to "YYYY-MM-DD"
+const formatDate = (date) => {
+  if (!(date instanceof Date)) {
+    // Attempt to convert the date to a Date object
+    date = new Date(date);
+  }
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
 
 const ViewGround = () => {
   const { gid } = useParams();
@@ -33,6 +45,8 @@ const ViewGround = () => {
   const { ground, loading, error } = groundState;
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  console.log('selectedDate' , formatDate(selectedDate.toDateString()));
   useEffect(() => {
     if (gid) {
       dispatch(fetchGroundDetails(gid)); // Use gid from params
@@ -102,6 +116,20 @@ const ViewGround = () => {
           {/* Ground details (visible for both desktop and mobile) */}
           <div className="col-12 col-lg-8">
             <h4>{name}</h4>
+            <div>
+              <DatePicker
+                selected={selectedDate}
+                onChange={(date) => {
+                  if (date) {
+                    setSelectedDate(date);
+                  }
+                }}
+                dateFormat="MMMM d, yyyy"
+                className="form-control"
+              />
+
+              <p><strong>Selected Date: </strong>{formatDate(selectedDate)}</p>
+            </div>
             <div className="d-flex justify-content-between">
               <div className="w-50 text-center">
                 <h6>Available Slots:</h6>
