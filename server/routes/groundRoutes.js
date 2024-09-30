@@ -9,7 +9,7 @@ router.post('/createGround', async (req, res) => {
     const { name, location, photo, description } = req.body;
 
     // Validate required fields
-    if (!name || !location  || !description) {
+    if (!name || !location || !description) {
         return res.status(400).json({ error: 'All fields are required' });
     }
 
@@ -24,7 +24,7 @@ router.post('/createGround', async (req, res) => {
 
         // Save the new ground document to the database
         await newGround.save();
-        
+
         // Respond with the newly created ground data
         res.status(201).json({
             message: 'Ground created successfully',
@@ -45,27 +45,27 @@ router.post('/createGround', async (req, res) => {
 //Ground lists based on location
 router.get('/grounds', async (req, res) => {
     try {
-      const { location } = req.query; // Get the location from query parameters
-      console.log('Requested location:', location);
-      const grounds = await Ground.find({ location }); // Find grounds by location
-      console.log('Available grounds:', grounds);
-      const response = grounds.map(ground => ({
-        ground_id: ground.ground_id,
-        data: {
-          name: ground.name,
-          location: ground.location,
-          photo: ground.photo,
-          description: ground.description,
-        },
-      }));
-  
-      res.json(response);
+        const { location } = req.query; // Get the location from query parameters
+        console.log('Requested location:', location);
+        const grounds = await Ground.find({ location }); // Find grounds by location
+        console.log('Available grounds:', grounds);
+        const response = grounds.map(ground => ({
+            ground_id: ground.ground_id,
+            data: {
+                name: ground.name,
+                location: ground.location,
+                photo: ground.photo,
+                description: ground.description,
+            },
+        }));
+
+        res.json(response);
     } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server error');
+        console.error(err.message);
+        res.status(500).send('Server error');
     }
-  });
-  
+});
+
 //Get Ground Details By Ground Id
 router.get('/ground/:ground_id', async (req, res) => {
     try {
@@ -74,21 +74,24 @@ router.get('/ground/:ground_id', async (req, res) => {
 
         // Find the ground by ground ID
         const ground = await Ground.findOne({ ground_id });
-        console.log('groundData :' , ground);
+        console.log('groundData :', ground);
         if (!ground) {
             return res.status(404).json({ message: 'Ground not found' });
         }
 
         // Set date to today if not provided
-        const selectedDate = date ? date : new Date().toISOString().split('T')[0]; 
+        const selectedDate = date ? date : new Date().toISOString().split('T')[0];
         console.log('Ground ID:', ground_id);
         console.log('Selected Date:', selectedDate);
         // Find the booking for the selected ground and date
-        const booking = await Booking.findOne({ ground_id, date: selectedDate });
-
-        console.log('bookings------ :' , booking);
+        const bookings = await Booking.find({ ground_id, date: selectedDate });
+        // Aggregate booked slots from all bookings
+        const bookedSlots = bookings.reduce((acc, booking) => {
+            return acc.concat(booking.slots);
+        }, []);
+        console.log('bookings------ :', bookings);
         //console.log(booking.slots , 'bookedslots')
-        const bookedSlots = booking ? booking.slots : [];
+        // const bookedSlots = booking ? booking.slots : [];
         console.log('bookedslots :', bookedSlots);
         // Format the response according to the specified structure
         const response = {
@@ -113,7 +116,7 @@ router.get('/ground/:ground_id', async (req, res) => {
 
 // router.get('/ground/:ground_id', async (req, res) => {
 //     try {
-     
+
 //       const {ground_id } = req.params;
 //       const { date } = req.query;  // Use query parameter for date
 //       // Find the ground by ground ID
@@ -152,14 +155,14 @@ router.get('/ground/:ground_id', async (req, res) => {
 //           booked: ground.slots.booked,
 //         },
 //       };
-  
+
 //       res.json(response);
 //     } catch (err) {
 //       console.error(err.message);
 //       res.status(500).send('Server error');
 //     }
 //   });
-  
+
 
 // Route to create a new ground
 // router.post('/grounds', async (req, res) => {

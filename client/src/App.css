@@ -7,10 +7,13 @@
 
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: poppins, sans-serif;
   line-height: 1.6;
 }
-
+.groundcards a{
+  text-decoration: none;
+  color : #000
+}
 /*********Modal css********/
 .modal-animate {
   opacity: 0;
@@ -39,3 +42,82 @@ body {
 .modal-backdrop.show {
   opacity: 0.7;
 }
+/*********MEDIA QUERIES********/
+/* ViewGround.css */
+
+/* Default styles for mobile */
+.viewgroundsection {
+  padding: 1rem;
+}
+
+.ground-image {
+  width: 100%;
+  height: auto;
+}
+
+/* Hide card on mobile devices */
+/* @media (max-width: 767px) {
+  .groundviewcard {
+    display: none;
+  }
+} */
+
+/* Ensure the columns are displayed side by side on desktop */
+@media (min-width: 768px) {
+  .row > .col-md-4 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* Tablet styles */
+@media (min-width: 768px) {
+  .viewgroundsection {
+      padding: 2rem;
+  }
+
+  .ground-image {
+      width: 90%;
+  }
+
+  .available-slots,
+  .booked-slots {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+  }
+
+  .available-slots li,
+  .booked-slots li {
+      flex: 1 1 45%; /* Two items per row */
+      margin: 0.5rem;
+  }
+}
+
+/* Desktop styles */
+@media (min-width: 992px) {
+  .ground-image {
+      width: 80%;
+  }
+
+  .available-slots,
+  .booked-slots {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+  }
+
+  .available-slots li,
+  .booked-slots li {
+      flex: 1 1 30%; /* Three items per row */
+      margin: 0.5rem;
+  }
+
+  .viewgroundsection {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+  }
+}
+

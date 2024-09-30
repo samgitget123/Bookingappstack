@@ -24,6 +24,21 @@ export const fetchGroundDetails = createAsyncThunk(
   }
 );
 
+// Async thunk for booking slots
+export const bookSlot = createAsyncThunk(
+  'ground/bookSlot',
+  async (bookingData, thunkAPI) => {
+    try {
+      const response = await axios.post('http://localhost:5000/book-slot', bookingData);
+      console.log('Booking Response:', response); // Log the booking response
+      return response.data;
+    } catch (error) {
+      console.error('Booking Error:', error); // Log the error
+      return thunkAPI.rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
 // Ground slice with reducers and extra reducers
 const groundSlice = createSlice({
   name: 'ground',
@@ -43,6 +58,21 @@ const groundSlice = createSlice({
       .addCase(fetchGroundDetails.rejected, (state, action) => {
         console.error('Fetch Error:', action.payload); // Log the error in the reducer
         state.error = action.payload.message || 'Failed to fetch ground details';
+        state.loading = false;
+      })
+      .addCase(bookSlot.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.bookingStatus = null; // Reset booking status
+      })
+      .addCase(bookSlot.fulfilled, (state, action) => {
+        state.bookingStatus = action.payload; // Set booking status to the response
+        console.log('Booking Payload:', action.payload); 
+        state.loading = false;
+      })
+      .addCase(bookSlot.rejected, (state, action) => {
+        console.error('Booking Error:', action.payload); // Log the error in the reducer
+        state.error = action.payload.message || 'Failed to book slots';
         state.loading = false;
       });
   },
