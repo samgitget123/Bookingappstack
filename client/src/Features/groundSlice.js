@@ -52,11 +52,9 @@ const groundSlice = createSlice({
       })
       .addCase(fetchGroundDetails.fulfilled, (state, action) => {
         state.ground = action.payload;
-        console.log('Reducer Payload:', action.payload); 
         state.loading = false;
       })
       .addCase(fetchGroundDetails.rejected, (state, action) => {
-        console.error('Fetch Error:', action.payload); // Log the error in the reducer
         state.error = action.payload.message || 'Failed to fetch ground details';
         state.loading = false;
       })
@@ -67,11 +65,10 @@ const groundSlice = createSlice({
       })
       .addCase(bookSlot.fulfilled, (state, action) => {
         state.bookingStatus = action.payload; // Set booking status to the response
-        console.log('Booking Payload:', action.payload); 
         state.loading = false;
+        
       })
       .addCase(bookSlot.rejected, (state, action) => {
-        console.error('Booking Error:', action.payload); // Log the error in the reducer
         state.error = action.payload.message || 'Failed to book slots';
         state.loading = false;
       });

@@ -4,6 +4,7 @@ import Header from './Components/Sections/Header';
 import Home from './Components/Sections/Home';
 import ViewGround from './Components/Sections/ViewGround';
 import Booknow from './Components/Sections/Booknow';
+import Payment from './Components/Sections/Payment';
 // Redux
 import { Provider } from 'react-redux';
 import store from './store';
@@ -22,7 +23,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/viewground/:gid" element={<ViewGround />} />
-              <Route path="/booking/:bookingid" element={<Booknow />} />
+              <Route path="/payment/:bookingid" element={<Payment />} />
             </Routes>
           </Container>
         </main>

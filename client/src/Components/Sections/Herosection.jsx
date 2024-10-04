@@ -3,12 +3,11 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCity, selectArea, fetchPlaygrounds } from '../../Features/citySlice';
-import banner from '../../Images/turf.jpeg';
-
+import display from '../../Images/crick_img.jpg'
 const Herosection = () => {
   const dispatch = useDispatch();
   const { cities, selectedCity, selectedArea, loading, error } = useSelector(state => state.city);
-console.log('cities' , selectedCity)
+
   const handleCityChange = (event) => {
     const city = event.target.value;
     dispatch(selectCity(city));
@@ -28,14 +27,13 @@ console.log('cities' , selectedCity)
           const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1`);
           const data = await response.json();
   
-          console.log('API Response:', data); // Inspect the full API response for debugging
+        
   
           // Extract city and area, handling cases where city might be missing
           const city = data.address.city || data.address.town || data.address.village || data.address.hamlet || data.address.state || 'Unknown City';
           const area = data.address.neighbourhood || data.address.suburb || data.address.road || data.address.footway || 'Unknown Area';
   
-          console.log('Current location:', { latitude, longitude, city, area });
-  
+         
           // Set city and area in state
           dispatch(selectCity(city));
           dispatch(selectArea(area));
@@ -58,15 +56,15 @@ console.log('cities' , selectedCity)
   
   return (
     <>
-      <section className='heroSectioncss'>
-        <div className="container-fluid">
-          <div className="row d-flex justify-content-center bg-light">
-            <div className="col-lg-4 col-md-12 col-sm-12 col-xs-12 g-0 p-2 bg-light">
-              <div className='my-2'>
-                <h4>Choose Your <span className='text-warning'>Ground</span></h4>
-                <form className="d-flex my-2" role="search" onSubmit={(e) => e.preventDefault()}>
+      <section className='bg-light text-dark p-sm-3  '>
+        <div className="container">
+          <div className=" d-sm-flex justify-content-evenly  my-3">
+              <img className='img-fluid  w-50 mt-md-3' src={display} alt="image" />
+              <div className='d-flex-column text-center'>
+                <h4 className='my-2'>Choose Your <span className='text-warning'>Ground</span></h4>
+                <form  role="search" onSubmit={(e) => e.preventDefault()}>
                   <select 
-                    className="form-control me-2" 
+                    className="form-control me-2 my-3" 
                     value={selectedCity} 
                     onChange={handleCityChange}
                   >
@@ -76,7 +74,7 @@ console.log('cities' , selectedCity)
                     ))}
                   </select>
                   <select 
-                    className="form-control me-2" 
+                    className="form-control me-2 my-3" 
                     value={selectedArea} 
                     onChange={handleAreaChange}
                     disabled={!selectedCity} 
@@ -88,7 +86,7 @@ console.log('cities' , selectedCity)
                   </select>
                 </form>
                 <div className='my-3'>
-                  <button className="btn btn-primary" onClick={handleGetCurrentLocation}>
+                  <button className="btn btn-primary my-3 " onClick={handleGetCurrentLocation}>
                     Use Current Location
                   </button>
                 </div>
@@ -96,10 +94,8 @@ console.log('cities' , selectedCity)
                   <h4 className='heading_caption'>Find Grounds <span className='text-warning'>@ Your Nearest</span></h4>
                 </div>
               </div>
-            </div>
-            <div className="col-lg-8 col-md-12 col-sm-12 g-0 bg-light">
-              {/* Your carousel code */}
-            </div>
+            
+           
           </div>
         </div>
       </section>

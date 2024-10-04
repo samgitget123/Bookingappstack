@@ -4,21 +4,31 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { bookSlot } from '../../Features/groundSlice';
-const BookModal = ({ showModal, handleCloseModal, selectedSlots = [] , groundId}) => {
+const BookModal = ({ showModal, handleCloseModal, selectedSlots = []  , selectdate}) => {
   const { gid } = useParams();
-  console.log('selectedslots', selectedSlots);
+  const navigate = useNavigate();
+ 
   const dispatch = useDispatch();
-
+  const { bookingId, loading, error } = useSelector((state) => state.ground);
   const handleBooking = () => {
     const bookingData = {
       ground_id: gid,
-      date: new Date().toISOString().slice(0, 10),
+      date: selectdate,
       slots: selectedSlots,
       combopack: true,
     };
 
     dispatch(bookSlot(bookingData));
   };
+  // useEffect(() => {
+  //   if (bookingId) {
+  //     navigate(`/payment/${gid}`, { state: bookingId });
+  //   }
+  // }, [bookingId, navigate, gid]);
+  // const navigate = useNavigate();
+  // const gotopayment = () => {
+  //   navigate(`/payment/${bookingId}`, { state: bookingId });
+  // };
   useEffect(() => {
     if (showModal) {
       document.body.style.overflow = 'hidden'; // Disable scrolling when modal is open
@@ -53,28 +63,6 @@ const BookModal = ({ showModal, handleCloseModal, selectedSlots = [] , groundId}
     // Return the formatted time range as one value
     return `${startTime} - ${endTime}`;
   };
-
-  // const formatslot = (slot) => {
-  //   console.log('selectedslot' , slot);
-
-  //   if (typeof slot !== 'string') return ''; // Ensure slot is a string
-
-  //   const [hours, half] = slot.split('.').map(Number);
-  //   const startMinutes = half === 0 ? '00' : '30';
-  //   const endHours = half === 0 ? hours : hours + 1;
-  //   const endMinutes = half === 0 ? '30' : '00';
-
-  //   const formatTime = (hours, minutes) => {
-  //     const period = hours >= 12 ? 'PM' : 'AM';
-  //     const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
-  //     return `${formattedHours}:${minutes} ${period}`;
-  //   };
-
-  //   const startTime = formatTime(hours, startMinutes);
-  //   const endTime = formatTime(endHours, endMinutes);
-  // console.log('starttime' , startTime , 'endtime ' , endTime);
-  //   return `${startTime} - ${endTime}`;
-  // };
 
   return (
     <>
