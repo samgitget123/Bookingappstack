@@ -162,7 +162,7 @@ const ViewGround = () => {
   };
 
   const handleSlotClick = (slot) => {
-  
+  console.log('onclickslot' , slot)
     if (selectedSlots.includes(slot)) {
       setSelectedSlots(selectedSlots.filter((s) => s !== slot));
     } else {

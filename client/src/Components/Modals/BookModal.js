@@ -10,16 +10,46 @@ const BookModal = ({ showModal, handleCloseModal, selectedSlots = []  , selectda
  
   const dispatch = useDispatch();
   const { bookingId, loading, error } = useSelector((state) => state.ground);
-  const handleBooking = () => {
-    const bookingData = {
-      ground_id: gid,
-      date: selectdate,
-      slots: selectedSlots,
-      combopack: true,
-    };
+  // const handleBooking = () => {
+  //   const bookingData = {
+  //     ground_id: gid,
+  //     date: selectdate,
+  //     slots: selectedSlots,
+  //     combopack: true,
+  //   };
 
-    dispatch(bookSlot(bookingData));
+  //   dispatch(bookSlot(bookingData));
+  // };
+const handleBooking = async (gid , selectedSlots , selectdate ) => {
+  const bookingData = {
+    ground_id: gid,
+    date: selectdate,
+    slots: selectedSlots,
+   
   };
+
+  try {
+    const response = await fetch(`http://localhost:5000/book-slot`, {
+      method: 'POST', // Specify the method
+      headers: {
+        'Content-Type': 'application/json', // Specify content type
+      },
+      body: JSON.stringify(bookingData), // Send bookingData as JSON string
+    });
+
+    // if (!response.ok) {
+    //   throw new Error('Failed to book slot');
+    // }
+
+    const data = await response.json();
+    navigate(`/payment/${gid}`, { state: data });
+    console.log('Bookingsuccessful:', data);
+    
+  } catch (error) {
+    console.error('Error booking slot:', error);
+  }
+};
+
   // useEffect(() => {
   //   if (bookingId) {
   //     navigate(`/payment/${gid}`, { state: bookingId });
@@ -89,6 +119,10 @@ const BookModal = ({ showModal, handleCloseModal, selectedSlots = []  , selectda
             <div className="modal-body">
               <p>Your booking details:</p>
               <p>Your booking details:</p>
+              <p>{gid}</p>
+              <p>{selectdate}</p>
+              <p>{selectedSlots}</p>
+           
               {selectedSlots.length > 0 ? (
                 <p>{formatslot(selectedSlots)}</p> // Call formatslot with the entire selectedSlots array
               ) : (
@@ -104,7 +138,9 @@ const BookModal = ({ showModal, handleCloseModal, selectedSlots = []  , selectda
               >
                 Close
               </button>
-              <button type="button" className="btn btn-primary" onClick={handleBooking}>
+              <button type="button" className="btn btn-primary"  onClick={()=>{
+                handleBooking(gid , selectedSlots , selectdate )
+              }}>
                 Confirm Booking
               </button>
             </div>

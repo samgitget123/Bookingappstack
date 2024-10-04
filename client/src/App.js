@@ -23,7 +23,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/viewground/:gid" element={<ViewGround />} />
-              <Route path="/payment/:bookingid" element={<Payment />} />
+              <Route path="/payment/:gid" element={<Payment />} />
             </Routes>
           </Container>
         </main>
