@@ -27,7 +27,7 @@ const Showgrounds = ({ selectedCity }) => {
   }
 
   return (
-    <div className="container">
+    <div className="container-fluid cardsection">
       <div>
            <Cardcomponent grounds={filteredPlaygrounds} />
       </div>

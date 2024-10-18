@@ -1,13 +1,13 @@
 
 // export default BookModal;
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { bookSlot } from '../../Features/groundSlice';
 const BookModal = ({ showModal, handleCloseModal, selectedSlots = []  , selectdate}) => {
   const { gid } = useParams();
   const navigate = useNavigate();
- 
+ const [info , setInfo] = useState('');
   const dispatch = useDispatch();
   const { bookingId, loading, error } = useSelector((state) => state.ground);
   // const handleBooking = () => {
@@ -42,8 +42,12 @@ const handleBooking = async (gid , selectedSlots , selectdate ) => {
     // }
 
     const data = await response.json();
-    navigate(`/payment/${gid}`, { state: data });
-    console.log('Bookingsuccessful:', data);
+    //navigate(`/payment/${gid}`, { state: data });
+    if(data){
+      setInfo(data.message);
+    }
+   
+    console.log('Bookingsuccessful:', data.message);
     
   } catch (error) {
     console.error('Error booking slot:', error);
@@ -118,19 +122,16 @@ const handleBooking = async (gid , selectedSlots , selectdate ) => {
             </div>
             <div className="modal-body">
               <p>Your booking details:</p>
-              <p>Your booking details:</p>
-              <p>{gid}</p>
-              <p>{selectdate}</p>
-              <p>{selectedSlots}</p>
-           
               {selectedSlots.length > 0 ? (
                 <p>{formatslot(selectedSlots)}</p> // Call formatslot with the entire selectedSlots array
               ) : (
                 <p>No slots selected.</p>
               )}
               <p>Please confirm your selection.</p>
+              <span>{info}</span>
             </div>
             <div className="modal-footer">
+              
               <button
                 type="button"
                 className="btn btn-secondary"

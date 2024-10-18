@@ -4,13 +4,23 @@
   padding: 0;
   box-sizing: border-box;
 }
+:root {
+  --primary-color:  #091057;
+  --secondary-color: #fff;
+  --teritary-color: #fff;
+}
 
 
 /* Apply Poppins font to the entire app */
 body {
   font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 400;
 }
-
+.listbox{
+  max-width: 150px;
+}
 .groundcards a{
   text-decoration: none;
   color : #000
@@ -62,9 +72,37 @@ body {
     display: none;
   }
 } */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.rotateImage{
+  animation: rotate 20s infinite linear; /* 5 seconds for full rotation, infinitely repeating */
+  width: 200px; /* Adjust width as needed */
+  height: auto; /* Maintain aspect ratio */
+}
 
+/*****colors****  ***/
+.secondaryColor{
+  background-color: var(--primary-color)!important;
+}
+.primaryColor{
+  background-color: var(--secondary-color)!important;
+}
+.cardsection{
+  background-color: var(--teritary-color);
+}
 /* Ensure the columns are displayed side by side on desktop */
+
 @media (min-width: 768px) {
+  body{
+    font-size: 16px;
+    line-height: 1.6;
+  }
   .row > .col-md-4 {
     display: flex;
     flex-direction: column;
@@ -74,6 +112,10 @@ body {
 
 /* Tablet styles */
 @media (min-width: 768px) {
+  body{
+    font-size: 16px;
+    line-height: 1.6;
+  }
   .viewgroundsection {
       padding: 2rem;
   }

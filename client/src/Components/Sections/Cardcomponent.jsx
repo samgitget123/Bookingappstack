@@ -1,9 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const CardComponent = ({ grounds }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const cardsPerPage = 8;
+  const [cardsPerPage, setCardsPerPage] = useState(8); //
+  //const cardsPerPage = 8;
+  // Check screen size and adjust cardsPerPage based on device
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        // For mobile devices
+        setCardsPerPage(4);
+      } else {
+        // For tablets and desktops
+        setCardsPerPage(8);
+      }
+    };
+
+    // Call the handler once to set the initial value based on current screen size
+    handleResize();
+
+    // Add event listener for screen resize
+    window.addEventListener('resize', handleResize);
+
+    // Clean up event listener on unmount
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Calculate the total number of pages
   const totalPages = Math.ceil(grounds.length / cardsPerPage);
@@ -36,7 +58,7 @@ const CardComponent = ({ grounds }) => {
         {currentCards && currentCards.length > 0 ? (
           currentCards.map((playground, index) => (
             <div className="col-lg-3 col-md-6 col-sm-12" key={index}>
-              <div className="card h-100 shadow-sm" onClick={() => handleCardClick(playground.ground_id)}>
+              <div className="card h-100 shadow-sm rounded" onClick={() => handleCardClick(playground.ground_id)}>
                 <img src={playground.data.photo} className="card-img-top img-fluid" alt={playground.data.name} />
                 <div className="card-body">
                   <h5 className="card-title">{playground.data.name}</h5>
@@ -57,25 +79,25 @@ const CardComponent = ({ grounds }) => {
       {/* Pagination Buttons */}
       {currentCards.length > 0 ? (
         <div className="row justify-content-center mt-4">
-        <div className="col-md-6 d-flex justify-content-between">
-          <button
-            className="btn btn-sm btn-primary"
-            onClick={handlePrev}
-            disabled={currentPage === 1}
-          >
-            Previous
-          </button>
-          <button
-            className="btn btn-sm btn-primary"
-            onClick={handleNext}
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </button>
+          <div className="col-md-6 d-flex justify-content-between">
+            <button
+              className="btn btn-sm  secondaryColor text-light"
+              onClick={handlePrev}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </button>
+            <button
+              className="btn btn-sm  secondaryColor text-light"
+              onClick={handleNext}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </button>
+          </div>
         </div>
-      </div>
-      ): null}
-      
+      ) : null}
+
     </div>
   );
 };

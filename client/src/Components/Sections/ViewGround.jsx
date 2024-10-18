@@ -178,7 +178,7 @@ const ViewGround = () => {
   const imageUrl = data?.image || groundImage;
   const description = data?.desc || 'No Description';
   const bookedSlots = slots?.booked || [];
-  const allSlots = ['6.0', '6.5', '7.0', '7.5', '8.0', '8.5', '9.0', '9.5', '10.0', '10.5', '11.0', '11.5', '12.0', '12.5', '1.0', '1.5', '2.0'];
+  const allSlots = ['6.0', '6.5', '7.0', '7.5', '8.0', '8.5', '9.0', '9.5', '10.0', '10.5', '11.0', '11.5', '12.0', '12.5', '1.0', '1.5', '2.0' , '2.5' , '3.0'];
   // const bookedSlotTimes = bookedSlots.map(formatSlot);
   // const slotbooks = bookings.map(formatSlot);
 
@@ -208,7 +208,7 @@ const convertSlotToTimeRange = (slot) => {
 };
 
   return (
-    <section className='viewgroundsection my-3'>
+    <section className='viewgroundsection my-2'>
       <div className="container">
         <div>
           <DatePicker
@@ -226,7 +226,7 @@ const convertSlotToTimeRange = (slot) => {
           <p><strong>Selected Date: </strong>{formatDate(selectedDate)}</p>
         </div>
         <div className="row">
-          <div className="col-lg-6 col-md-12 col-sm-12 col-xs-12 col-xlg-6">
+          <div className="col-lg-6 col-md-12 col-sm-12 col-xs-12 col-xlg-6 g-0">
             {/* Available Slots Section */}
             <div className='d-flex justify-content-evenly text-center'>
               <div>
@@ -234,7 +234,7 @@ const convertSlotToTimeRange = (slot) => {
                 <ul className="list-unstyled">
                   {availableSlots.length > 0 ? (
                     availableSlots.map((slot, index) => (
-                      <li key={index}>
+                      <li key={index} className='listbox'>
                         <button
                           className={`btn ${selectedSlots.includes(slot) ? 'btn-success' : 'btn-primary'} btn-sm m-1`}
                           onClick={() => handleSlotClick(slot)}
