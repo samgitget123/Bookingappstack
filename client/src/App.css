@@ -137,11 +137,17 @@ body {
       margin: 0.5rem;
   }
 }
-
+.groundImgsize{
+  width: 10rem;
+  height: 10rem;
+}
 /* Desktop styles */
 @media (min-width: 992px) {
   .ground-image {
       width: 80%;
+  }
+  .webheading{
+    font-size: 4rem !important;
   }
 
   .available-slots,

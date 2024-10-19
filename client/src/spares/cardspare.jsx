@@ -1,6 +1,6 @@
 import React, { useState , useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import groundImage from '../../Images/crick_img.jpg'
+
 const CardComponent = ({ grounds }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [cardsPerPage, setCardsPerPage] = useState(8); //
@@ -59,11 +59,11 @@ const CardComponent = ({ grounds }) => {
           currentCards.map((playground, index) => (
             <div className="col-lg-3 col-md-6 col-sm-12" key={index}>
               <div className="card h-100 shadow-lg border-0 rounded" onClick={() => handleCardClick(playground.ground_id)}>
-                <img src={groundImage} className="card-img-top img-fluid groundImgsize" alt={playground.data.name} />
+                <img src={playground.data.photo} className="card-img-top img-fluid" alt={playground.data.name} />
                 <div className="card-body">
-                  <display className="card-title">{playground.data.name}</display>
-                  <p className="card-text text-muted">
-                    Location: {playground.data.location}
+                  <h5 className="card-title">{playground.data.name}</h5>
+                  <p className="card-text">
+                    Location: <strong>{playground.data.location}</strong>
                   </p>
                 </div>
               </div>
