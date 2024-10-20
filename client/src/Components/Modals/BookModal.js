@@ -42,7 +42,7 @@ const handleBooking = async (gid , selectedSlots , selectdate ) => {
     // }
 
     const data = await response.json();
-    //navigate(`/payment/${gid}`, { state: data });
+    navigate(`/payment/${gid}`, { state: data });
     if(data){
       setInfo(data.message);
     }

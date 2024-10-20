@@ -178,7 +178,7 @@ const ViewGround = () => {
   const imageUrl = data?.image || groundImage;
   const description = data?.desc || 'No Description';
   const bookedSlots = slots?.booked || [];
-  const allSlots = ['6.0', '6.5', '7.0', '7.5', '8.0', '8.5', '9.0', '9.5', '10.0', '10.5', '11.0', '11.5', '12.0', '12.5', '1.0', '1.5', '2.0' , '2.5' , '3.0'];
+  const allSlots = ['6.0', '6.5', '7.0', '7.5', '8.0', '8.5', '9.0', '9.5', '10.0', '10.5', '11.0', '11.5', '12.0', '12.5', '1.0', '1.5', '2.0' , '2.5' , '3.0','3.5','4.0','4.5','5.0','5.5','6.0','6.5','7.0','7.5','8.0','8.5','9.0','10.0','10.5','11.0','11.5','12.0','12.5','13.0','13.5'];
   // const bookedSlotTimes = bookedSlots.map(formatSlot);
   // const slotbooks = bookings.map(formatSlot);
 
@@ -191,21 +191,61 @@ const ViewGround = () => {
 const availableSlots = allSlots.filter((slot) => !bookings.includes(slot)).map(formatSlot);
 const bookedslotsbydate = bookings.map(formatSlot);
 
+// const convertSlotToTimeRange = (slot) => {
+//   const [hours, half] = slot.split('.').map(Number); // Split hours and half-hour indicator
+
+//   // Calculate start time in 12-hour format
+//   const startHour = hours % 12 === 0 ? 12 : hours % 12;
+//   const startMinutes = half === 0 ? '00' : '30';
+//   const startPeriod = hours < 12 ? 'AM' : 'PM';
+
+//   // Calculate end time in 12-hour format
+//   const endHour = half === 0 ? (hours % 12 === 11 ? 12 : (hours + 1) % 12) : startHour;
+//   const endMinutes = half === 0 ? '30' : '00';
+//   const endPeriod = (half === 0 && hours === 11) || (half === 0 && hours + 1 === 12) || hours + 1 >= 12 ? 'PM' : 'AM';
+
+//   return `${startHour}:${startMinutes} ${startPeriod} - ${endHour}:${endMinutes} ${endPeriod}`;
+// };
+
 const convertSlotToTimeRange = (slot) => {
-  const [hours, half] = slot.split('.').map(Number); // Split hours and half-hour indicator
+  let [hours, half] = slot.split('.').map(Number);
 
-  // Calculate start time in 12-hour format
-  const startHour = hours % 12 === 0 ? 12 : hours % 12;
-  const startMinutes = half === 0 ? '00' : '30';
-  const startPeriod = hours < 12 ? 'AM' : 'PM';
+  // Adjust for 26-hour format (6 AM to 2 AM)
+  if (hours >= 6 && hours <= 11) {
+    // Morning slots (6 AM - 11 AM)
+    const startHour = hours;
+    const startMinutes = half === 0 ? '00' : '30';
+    const endHour = half === 0 ? hours : hours + 1;
+    const endMinutes = half === 0 ? '30' : '00';
+    return `${startHour}:${startMinutes} AM - ${endHour}:${endMinutes} AM`;
+  } else if (hours === 12) {
+    // Noon slots (12 PM)
+    const startMinutes = half === 0 ? '00' : '30';
+    const endHour = half === 0 ? hours : 1;
+    const endMinutes = half === 0 ? '30' : '00';
+    return `12:${startMinutes} PM - ${endHour}:${endMinutes} PM`;
+  } else if (hours >= 1 && hours <= 7) {
+    // Afternoon to early night slots (1 PM - 7 PM)
+    const startHour = hours;
+    const startMinutes = half === 0 ? '00' : '30';
+    const endHour = half === 0 ? hours : hours + 1;
+    const endMinutes = half === 0 ? '30' : '00';
+    return `${startHour}:${startMinutes} PM - ${endHour}:${endMinutes} PM`;
+  } else {
+    // Late night slots (8 PM - 2 AM)
+    const adjustedHours = hours > 7 ? hours - 12 : hours;
+    const startHour = adjustedHours === 0 ? 12 : adjustedHours;
+    const startMinutes = half === 0 ? '00' : '30';
+    const endHour = half === 0 ? startHour : startHour + 1;
+    const endMinutes = half === 0 ? '30' : '00';
+    const startPeriod = hours >= 8 ? 'PM' : 'AM';
+    const endPeriod = (hours === 12 || hours + 1 > 7) ? 'AM' : 'PM';
 
-  // Calculate end time in 12-hour format
-  const endHour = half === 0 ? (hours % 12 === 11 ? 12 : (hours + 1) % 12) : startHour;
-  const endMinutes = half === 0 ? '30' : '00';
-  const endPeriod = (half === 0 && hours === 11) || (half === 0 && hours + 1 === 12) || hours + 1 >= 12 ? 'PM' : 'AM';
-
-  return `${startHour}:${startMinutes} ${startPeriod} - ${endHour}:${endMinutes} ${endPeriod}`;
+    return `${startHour}:${startMinutes} ${startPeriod} - ${endHour}:${endMinutes} ${endPeriod}`;
+  }
 };
+
+
 
   return (
     <section className='viewgroundsection my-2 '>
@@ -237,9 +277,9 @@ const convertSlotToTimeRange = (slot) => {
                 <ul className="list-unstyled">
                   {availableSlots.length > 0 ? (
                     availableSlots.map((slot, index) => (
-                      <li key={index} className='listbox'>
+                      <li key={index} className='listbox mb-1 ' >
                         <button
-                          className={`btn ${selectedSlots.includes(slot) ? 'btn-success' : 'btn-primary'} btn-sm `}
+                          className={`btn ${selectedSlots.includes(slot) ? 'btn-success' : 'btn-primary'} btn-sm availablebtn`}
                           onClick={() => handleSlotClick(slot)}
                         >
                           {convertSlotToTimeRange(slot)}
@@ -256,7 +296,7 @@ const convertSlotToTimeRange = (slot) => {
                 <ul className="list-unstyled">
                   {bookedslotsbydate.length > 0 ? (
                     bookedslotsbydate.map((slot, index) => (
-                      <li key={index}>
+                      <li key={index}  className='listbox mb-1'>
                         <button
                           type="button"
                           className="btn btn-secondary btn-sm "
@@ -279,9 +319,11 @@ const convertSlotToTimeRange = (slot) => {
 
 
           {/* Ground Details Card */}
-          <div className="col-md-4 groundviewcard ">
+          <div className="col-md-4 groundviewcard my-3 ">
             <div className="card shadow-lg border-0 rounded secondaryColor viewcardFont">
-              <button variant="primary" className="btn btn-primary" onClick={confirnnowClick}>Confirm Now</button>
+            <div className='mobileconfirmnow  d-flex justify-content-center mt-3'>
+            <button variant="primary" className="btn btn-primary confirmbtn" onClick={confirnnowClick}>Confirm Now</button>
+            </div>
               <img src={imageUrl} className="card-img-top ground-image img-fluid mb-3" alt={name || 'Ground Image'} />
               <div className="card-body">
                 <h5 className="card-title">{name || 'No Name'}</h5>

@@ -60,7 +60,7 @@ const CardComponent = ({ grounds }) => {
             <div className="col-lg-3 col-md-6 col-sm-12" key={index}>
               <div className="card h-80 shadow-lg border-0 rounded" onClick={() => handleCardClick(playground.ground_id)}>
                 <img src={groundImage} className="card-img-top img-fluid groundImgsize" alt={playground.data.name} />
-                <div className="card-body teritoryColor secondaryFont">
+                <div className="card-body teritoryColor "> 
                   <h4 className="card-title teritoryFont">{playground.data.name}</h4>
                   <p className="card-text  teritoryFont">
                     Location: {playground.data.location}

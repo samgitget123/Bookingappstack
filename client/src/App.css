@@ -126,6 +126,9 @@ span .secondaryFont{
   text-overflow: ellipsis; /* Add the ellipsis (...) */
   max-width: 100%;     /* Set a maximum width for the element */
 }
+.availablebtn{
+  font-size: 12px!important;
+}
 .confirmbtn{
   width: 80%!important;
   
@@ -151,9 +154,13 @@ span .secondaryFont{
     font-size: 16px;
     line-height: 1.6;
   }
-  /* .viewgroundsection {
-      padding: 2rem;
-  } */
+  .viewgroundsection {
+      background-image: url('./Images/bgcrick.jpg');
+      background-repeat: no-repeat; /* Prevent the background from repeating */
+      background-position: top right; /* Position the background at the top right */
+      background-size: cover; /* Ensure the background covers the entire section */
+      
+  }
 
   .ground-image {
       width: 90%;

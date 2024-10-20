@@ -7,9 +7,20 @@ import groundImage from '../../Images/turf.jpeg';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-//Modal
 import BookModal from '../Modals/BookModal';
-// Helper function to format slot times
+
+// Helper functions...
+const formatDate = (date) => {
+  if (!(date instanceof Date)) {
+    date = new Date(date);
+  }
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+// Slot format helper functions
 const formatSlot = (slot) => {
   const [hours, minutes] = slot.split('.').map(Number);
   const startHours = Math.floor(hours);
@@ -20,83 +31,26 @@ const formatSlot = (slot) => {
   return `${String(startHours).padStart(2, '0')}:${String(startMinutes).padStart(2, '0')} - ${String(endHours).padStart(2, '0')}:${String(endMinutes).padStart(2, '0')}`;
 };
 
-// Helper function to reverse format slot
 const reverseFormatSlot = (formattedSlot) => {
   const [startTime] = formattedSlot.split(' - ');
   const [hours, minutes] = startTime.split(':').map(Number);
   return minutes === 0 ? `${hours}.0` : `${hours}.5`;
 };
-// Helper function to format date to "YYYY-MM-DD"
-const formatDate = (date) => {
-  if (!(date instanceof Date)) {
-    // Attempt to convert the date to a Date object
-    date = new Date(date);
-  }
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-};
 
 const ViewGround = () => {
   const { gid } = useParams();
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
+  
   const groundState = useSelector((state) => state.ground || {});
   const { ground, loading, error } = groundState;
+  
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [bookings, setBookings] = useState([]);
- 
-  // Fetch ground details and booked slots
-  // useEffect(() => {
-  //   if (gid) {
-  //     dispatch(fetchGroundDetails(gid)); // Fetch initial ground details
-
-  //     const fetchGroundDetailsWithDate = async () => {
-  //       const formattedDate = formatDate(selectedDate);
-  //       console.log('Formatted Date:', formattedDate);
-  //       try {
-  //         const response = await axios.get(`http://localhost:5000/ground/${gid}?date=${formattedDate}`);
-  //         // Assuming response.data.slots is an array of booked slots
-  //         const API = `http://localhost:5000/ground/${gid}?date=${formattedDate}`
-  //         setBookings(response.data.slots || []);
-  //         console.log('bookApi', API)
-  //         console.log('bookedaval', bookedSlots);
-  //         console.log('Fetched Booked Slots:', response.data.slots);
-  //       } catch (error) {
-  //         console.error('Error fetching ground details:', error);
-  //       }
-  //     };
-
-  //     fetchGroundDetailsWithDate();
-  //   }
-  // }, [dispatch, gid, selectedDate]); // Dependency array includes selectedDate to refetch data on date change
-  // useEffect(() => {
-  //   if (gid) {
-  //     dispatch(fetchGroundDetails(gid));
-  //     fetchGroundDetailsWithDate(formatDate(selectedDate));
-  //   }
-  // }, [dispatch, gid, selectedDate]);
   
-
-  // const fetchGroundDetailsWithDate = async (formattedDate) => {
-  //   try {
-      
-  //     const response = await axios.get(`http://localhost:5000/ground/${gid}?date=${formattedDate}`);
-     
-  //     setBookings(response.data.slots.booked || []);
-  //   } catch (error) {
-  //     console.error('Error fetching ground details:', error);
-  //   }
-  // };
-  // const handleDateChange = (date) => {
-  //   if (date) {
-  //     setSelectedDate(date);
-  //   }
-  // };
+  // Fetch ground details and bookings
   useEffect(() => {
     if (gid) {
       dispatch(fetchGroundDetails(gid));
@@ -119,37 +73,30 @@ const ViewGround = () => {
     }
   };
 
-  // Example function to format slot
-  const formatSlot = (slot) => {
-    // Implement your formatSlot function here
-    return slot; // Example: return formatted slot
-  };
-
   const confirnnowClick = () => {
     setShowModal(true);
-  }
-  const handleCloseModal = () => {
-    setShowModal(false); // Close the modal
   };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
   const handleBookClick = async () => {
-   
     const slotsForAPI = selectedSlots.map(reverseFormatSlot);
     if (selectedSlots.length > 0) {
       const bookingData = {
-        ground_id: gid,            // Ground ID from route params
-        date: new Date().toISOString().slice(0, 10), // Current date in 'YYYY-MM-DD' format
-        slots: slotsForAPI,      // Selected slots
-        combopack: true            // Assuming you want combopack true, can be dynamic if needed
+        ground_id: gid,
+        date: new Date().toISOString().slice(0, 10),
+        slots: slotsForAPI,
+        combopack: true,
       };
 
       try {
         const response = await axios.post('http://localhost:5000/book-slot', bookingData);
 
         if (response.status === 200) {
-        
           navigate(`/booking/${gid}`);
         } else {
-         
           alert('Booking failed, please try again.');
         }
       } catch (error) {
@@ -162,7 +109,6 @@ const ViewGround = () => {
   };
 
   const handleSlotClick = (slot) => {
-  console.log('onclickslot' , slot)
     if (selectedSlots.includes(slot)) {
       setSelectedSlots(selectedSlots.filter((s) => s !== slot));
     } else {
@@ -177,35 +123,26 @@ const ViewGround = () => {
   const { name, location, data, slots } = ground;
   const imageUrl = data?.image || groundImage;
   const description = data?.desc || 'No Description';
-  const bookedSlots = slots?.booked || [];
-  const allSlots = ['6.0', '6.5', '7.0', '7.5', '8.0', '8.5', '9.0', '9.5', '10.0', '10.5', '11.0', '11.5', '12.0', '12.5', '1.0', '1.5', '2.0' , '2.5' , '3.0'];
-  // const bookedSlotTimes = bookedSlots.map(formatSlot);
-  // const slotbooks = bookings.map(formatSlot);
+  
+  const allSlots = ['6.0', '6.5', '7.0', '7.5', '8.0', '8.5', '9.0', '9.5', '10.0', '10.5', '11.0', '11.5', '12.0', '12.5', '1.0', '1.5', '2.0', '2.5', '3.0'];
 
-  // const availableSlots = allSlots.filter((slot) => !bookedSlots.includes(slot)).map(formatSlot);
-  // const bookedslotsbydate = bookings.map(formatSlot);
- 
+  // Define availableSlots and bookedslotsbydate here, before using them
+  const availableSlots = allSlots.filter((slot) => !bookings.includes(slot)).map(formatSlot);
+  const bookedslotsbydate = bookings.map(formatSlot);
 
- 
-// Helper function to convert slot value to time range with AM/PM
-const availableSlots = allSlots.filter((slot) => !bookings.includes(slot)).map(formatSlot);
-const bookedslotsbydate = bookings.map(formatSlot);
+  const convertSlotToTimeRange = (slot) => {
+    const [hours, half] = slot.split('.').map(Number);
 
-const convertSlotToTimeRange = (slot) => {
-  const [hours, half] = slot.split('.').map(Number); // Split hours and half-hour indicator
+    const startHour = hours % 12 === 0 ? 12 : hours % 12;
+    const startMinutes = half === 0 ? '00' : '30';
+    const startPeriod = hours < 12 ? 'AM' : 'PM';
 
-  // Calculate start time in 12-hour format
-  const startHour = hours % 12 === 0 ? 12 : hours % 12;
-  const startMinutes = half === 0 ? '00' : '30';
-  const startPeriod = hours < 12 ? 'AM' : 'PM';
+    const endHour = half === 0 ? (hours % 12 === 11 ? 12 : (hours + 1) % 12) : startHour;
+    const endMinutes = half === 0 ? '30' : '00';
+    const endPeriod = hours + (half === 0 ? 1 : 0) >= 12 ? 'PM' : 'AM';
 
-  // Calculate end time in 12-hour format
-  const endHour = half === 0 ? (hours % 12 === 11 ? 12 : (hours + 1) % 12) : startHour;
-  const endMinutes = half === 0 ? '30' : '00';
-  const endPeriod = (half === 0 && hours === 11) || (half === 0 && hours + 1 === 12) || hours + 1 >= 12 ? 'PM' : 'AM';
-
-  return `${startHour}:${startMinutes} ${startPeriod} - ${endHour}:${endMinutes} ${endPeriod}`;
-};
+    return `${startHour}:${startMinutes} ${startPeriod} - ${endHour}:${endMinutes} ${endPeriod}`;
+  };
 
   return (
     <section className='viewgroundsection my-2 '>
@@ -222,14 +159,12 @@ const convertSlotToTimeRange = (slot) => {
             dateFormat="MMMM d, yyyy"
             className="form-control"
           />
-
           <p><strong>Selected Date: </strong>{formatDate(selectedDate)}</p>
         </div>
         <div className="row">
           <div className="col-lg-6 col-md-12 col-sm-12 col-xs-12 col-xlg-6 g-0 secondaryColor rounded">
-            {/* Available Slots Section */}
             <div className='mobileconfirmnow d-sm-none d-flex justify-content-center mt-3'>
-            <button variant="primary" className="btn btn-primary confirmbtn" onClick={confirnnowClick}>Confirm Now</button>
+              <button variant="primary" className="btn btn-primary confirmbtn" onClick={confirnnowClick}>Confirm Now</button>
             </div>
             <div className='d-flex justify-content-evenly text-center pt-3'>
               <div>
@@ -239,7 +174,7 @@ const convertSlotToTimeRange = (slot) => {
                     availableSlots.map((slot, index) => (
                       <li key={index} className='listbox'>
                         <button
-                          className={`btn ${selectedSlots.includes(slot) ? 'btn-success' : 'btn-primary'} btn-sm `}
+                          className={`btn ${selectedSlots.includes(slot) ? 'btn-success' : 'btn-primary'} btn-lg `}
                           onClick={() => handleSlotClick(slot)}
                         >
                           {convertSlotToTimeRange(slot)}
@@ -256,13 +191,13 @@ const convertSlotToTimeRange = (slot) => {
                 <ul className="list-unstyled">
                   {bookedslotsbydate.length > 0 ? (
                     bookedslotsbydate.map((slot, index) => (
-                      <li key={index}  className='listbox'>
+                      <li key={index}>
                         <button
                           type="button"
                           className="btn btn-secondary btn-sm "
                           disabled
                         >
-                          {convertSlotToTimeRange(slot)} {/* Format if needed */}
+                          {convertSlotToTimeRange(slot)}
                         </button>
                       </li>
                     ))
@@ -271,35 +206,35 @@ const convertSlotToTimeRange = (slot) => {
                   )}
                 </ul>
               </div>
-             
             </div>
           </div>
-          {/* Booked Slots Section */}
-
-
 
           {/* Ground Details Card */}
-          <div className="col-md-4 groundviewcard ">
-            <div className="card shadow-lg border-0 rounded secondaryColor viewcardFont">
-              <button variant="primary" className="btn btn-primary" onClick={confirnnowClick}>Confirm Now</button>
-              <img src={imageUrl} className="card-img-top ground-image img-fluid mb-3" alt={name || 'Ground Image'} />
+          <div className="col-md-4 groundviewcard my-3 ">
+            <div className="card shadow my-2">
+              <div className="card-header">
+                <h4 className="ground-view-title">{name}</h4>
+              </div>
+              <img
+                src={imageUrl}
+                className="card-img-top groundimage mt-1"
+                alt="ground"
+              />
               <div className="card-body">
-                <h5 className="card-title">{name || 'No Name'}</h5>
-                <h6 className="card-subtitle mb-2 viewcardFont">Location: {location || 'No Location'}</h6>
-                <p className="card-text viewcardFont">{description}</p>
+                <h6 className="card-title ground-view-location">{location}</h6>
+                <p className="card-text ground-view-desc">{description}</p>
               </div>
             </div>
           </div>
-
-
         </div>
-
-
-        {/* BookModal component */}
-        <BookModal showModal={showModal} handleCloseModal={handleCloseModal} selectedSlots={selectedSlots} selectdate={formatDate(selectedDate)} />
+        <BookModal
+          show={showModal}
+          handleClose={handleCloseModal}
+          handleBookClick={handleBookClick}
+          selectedSlots={selectedSlots}
+        />
       </div>
     </section>
-
   );
 };
 
