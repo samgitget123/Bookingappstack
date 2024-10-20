@@ -1,116 +1,210 @@
 /* Basic reset */
+/****** 00FF9C  , 091057 *** #006849 **/
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+:root {
+  --primary-color:  #006849 ;   
+  --secondary-color: #fff;
+  --teritary-color: #091057;
+  --primary-font : #fff;
+  --secondary-font : #000;
+  --teritory-font : #fff;
+}
+
+
+/* Apply Poppins font to the entire app */
+body {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+.listbox{
+  max-width: 150px;
+}
+.groundcards a{
+  text-decoration: none;
+  color : #000
+}
+/*********Modal css********/
+.modal-animate {
+  opacity: 0;
+  transform: translateY(-100px);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.modal.show.modal-animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Centering the modal vertically and horizontally */
+.modal-dialog-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Custom modal backdrop transition */
+.modal-backdrop {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.modal-backdrop.show {
+  opacity: 0.7;
+}
+/*********MEDIA QUERIES********/
+/* ViewGround.css */
+
+/* Default styles for mobile */
+.viewgroundsection {
+  padding: 1rem;
+}
+
+.ground-image {
+  width: 100%;
+  height: auto;
+}
+
+/* Hide card on mobile devices */
+/* @media (max-width: 767px) {
+  .groundviewcard {
+    display: none;
   }
-  
-  body {
-    font-family: Arial, sans-serif;
+} */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.rotateImage{
+  animation: rotate 20s infinite linear; /* 5 seconds for full rotation, infinitely repeating */
+  width: 200px; /* Adjust width as needed */
+  height: auto; /* Maintain aspect ratio */
+}
+
+/*****colors****  ***/
+.secondaryColor{
+  background-color: var(--primary-color)!important;
+}
+.primaryColor{
+  background-color: var(--secondary-color)!important;
+}
+/* .cardsection{
+  background-color: var(--teritary-color);
+} */
+.primaryFont{
+  color: var(--primary-font);
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 40px;
+
+}
+.teritoryColor{
+  background-color: var(--teritary-color);
+}
+.teritoryFont{
+  color: var(--teritory-font) !important;
+}
+span .secondaryFont{
+  color : var(--secondary-font);
+}
+/* Ensure the columns are displayed side by side on desktop */
+.card-title {
+  white-space: nowrap; /* Prevent the text from wrapping */
+  overflow: hidden;    /* Hide the overflowed text */
+  text-overflow: ellipsis; /* Add the ellipsis (...) */
+  max-width: 100%;     /* Set a maximum width for the element */
+}
+
+@media (min-width: 768px) {
+  body{
+    font-size: 16px;
     line-height: 1.6;
   }
-  
-  .logo {
-    height: 80vh;
-    width: 100%;
-  }
-  
-  .SignIn {
-    text-decoration: none;
-    font-size: medium;
-  }
-  
-  .img-fluid {
-    width: 100%;
-  }
-  
-  .heading_caption {
-    font-size: 30px;
-  }
-  
-  .custom-carousel-height {
-    height: 400px; /* Adjust this value as needed */
-    position: relative;
-  }
-  
-  .carousel-image {
-    height: 100%;
-    object-fit: cover; /* Cover the entire height while maintaining aspect ratio */
-  }
-  
-  .ground-image {
-    width: 100%;
-    height: 60vh;
-    object-fit: cover; /* This will maintain the aspect ratio and crop the image if necessary */
-  }
-  
-  .image-container {
-    overflow: hidden; /* Optional: Use this if you want to restrict the image to a specific size */
-  }
-  
-  .time-slot-container {
+  .row > .col-md-4 {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0px;
+    flex-direction: column;
+    align-items: center;
   }
+}
+
+/* Tablet styles */
+@media (min-width: 768px) {
+  body{
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  .viewgroundsection {
+      padding: 2rem;
+  }
+
+  .ground-image {
+      width: 90%;
+  }
+
+  .available-slots,
+  .booked-slots {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+  }
+
+  .available-slots li,
+  .booked-slots li {
+      flex: 1 1 45%; /* Two items per row */
+      margin: 0.5rem;
+  }
+}
+.groundImgsize{
+  width: 8rem;
+  height: 8rem;
+}
+/*****Mobiles*******/
+@media (max-width:767){
+  .webheading{
+    font-size: 42px!important;
+    line-height: 42px!important;
+    color: var(--primary-font)!important;
+  }
+}
+/* Desktop styles */
+@media (min-width: 992px) {
+  .ground-image {
+      width: 80%;
+  }
+  .webheading{
+    font-size: 42px;
+    line-height: 42px;
+    color: var(--primary-font);
+  }
+
+  .available-slots,
+  .booked-slots {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+  }
+
+  .available-slots li,
+  .booked-slots li {
+      flex: 1 1 30%; /* Three items per row */
+      margin: 0.5rem;
+  }
+
+  .viewgroundsection {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+  }
+
   
-  .time-slot {
-    padding: 10px 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    cursor: pointer;
-    text-align: center;
-    position: relative; /* To position the cancel button inside the slot */
-  }
-  
-  .time-slot.available {
-    background-color: transparent; /* No background color initially */
-    color: #000;
-    
-  }
-  .time-slot.available.selected {
-    background-color: #28a745; /* Green background when selected */
-    color: white; /* Change text color when selected */
-  }
-  .time-slot.booked {
-    background-color: cadetblue;
-    color: white;
-    cursor: not-allowed;
-    
-  }
-  
-  @media (min-width: 576px) {
-    .time-slot {
-      width: 30%;
-      margin-bottom: 10px;
-      background-color: green;
-    }
-    .time-slot.available{
-      width: 50%;
-    }
-    .time-slot.booked{
-      width: 50%;
-    }
-  }
-  
-  @media (max-width: 576px) {
-    .time-slot {
-      width: 100%;
-      margin-bottom: 10px;
-      background-color: blue;
-    }
-    .time-slot.available{
-      width: 100%
-    }
-    .time-slot.booked{
-      width: 100%
-    }
-  }
-  
-  .btn.cancel-button {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    padding: 2px 5px;
-  }
-  
+}
+

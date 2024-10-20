@@ -110,8 +110,8 @@ const Herosection = () => {
     
   return (
     <>
-      <section className=' text-dark p-sm-3  primaryColor' style={{minHeight:'50vh'}}>
-        <div className="container ">
+      <section className=' text-dark  primaryColor' style={{minHeight:'50vh'}}>
+        <div className="container-fluid">
           <div className=" d-sm-flex justify-content-evenly  my-3">
             <div className='row'>
               <div className="col-lg-7 justify-content-center">
@@ -123,7 +123,7 @@ const Herosection = () => {
                     <div className='mb-3 d-none d-sm-block mb-sm-5'>
                       <img className='img-fluid w-50 ' class='rotateImage'   src={brandlogo} alt="logo" />
                     </div>
-                    <h4 className='my-2 text-light'>Choose Your <span className='text-warning'>Ground</span></h4>
+                    <h4 className='my-2 primaryFont'>Choose Your <span className='secondaryFont'>Ground</span></h4>
                     <form role="search" onSubmit={(e) => e.preventDefault()}>
                       <select
                         className="form-control my-3"
@@ -147,13 +147,13 @@ const Herosection = () => {
                         ))}
                       </select>
                     </form>
-                    {/* <div className='my-3'>
+                    <div className='my-3'>
                       <button className="btn btn-primary my-3 " onClick={requestLocationAccess}>
                         Use Current Location
                       </button>
-                    </div> */}
-                    <div className='my-3'>
-                      <h4 className='text-light webheading'>Find Grounds <span className='text-warning webheading'>@ Your Nearest</span></h4>
+                    </div>
+                    <div className='my-5'>
+                      <h4 className='webheading'>Find Grounds <span className='webheading'>@ Your Nearest</span></h4>
                     </div>
                   </div>
                 </div>

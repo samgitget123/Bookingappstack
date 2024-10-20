@@ -208,7 +208,7 @@ const convertSlotToTimeRange = (slot) => {
 };
 
   return (
-    <section className='viewgroundsection my-2'>
+    <section className='viewgroundsection my-2 '>
       <div className="container">
         <div>
           <DatePicker
@@ -226,17 +226,20 @@ const convertSlotToTimeRange = (slot) => {
           <p><strong>Selected Date: </strong>{formatDate(selectedDate)}</p>
         </div>
         <div className="row">
-          <div className="col-lg-6 col-md-12 col-sm-12 col-xs-12 col-xlg-6 g-0">
+          <div className="col-lg-6 col-md-12 col-sm-12 col-xs-12 col-xlg-6 g-0 secondaryColor rounded">
             {/* Available Slots Section */}
-            <div className='d-flex justify-content-evenly text-center'>
+            <div className='mobileconfirmnow d-sm-none d-flex justify-content-center mt-3'>
+            <button variant="primary" className="btn btn-primary confirmbtn" onClick={confirnnowClick}>Confirm Now</button>
+            </div>
+            <div className='d-flex justify-content-evenly text-center pt-3'>
               <div>
-                <h6>Available Slots:</h6>
+                <h6 className='teritoryFont'>Available Slots:</h6>
                 <ul className="list-unstyled">
                   {availableSlots.length > 0 ? (
                     availableSlots.map((slot, index) => (
                       <li key={index} className='listbox'>
                         <button
-                          className={`btn ${selectedSlots.includes(slot) ? 'btn-success' : 'btn-primary'} btn-sm m-1`}
+                          className={`btn ${selectedSlots.includes(slot) ? 'btn-success' : 'btn-primary'} btn-sm `}
                           onClick={() => handleSlotClick(slot)}
                         >
                           {convertSlotToTimeRange(slot)}
@@ -244,19 +247,19 @@ const convertSlotToTimeRange = (slot) => {
                       </li>
                     ))
                   ) : (
-                    <li>No available slots</li>
+                    <li className='teritoryFont'>No available slots</li>
                   )}
                 </ul>
               </div>
               <div>
-                <h6>Booked Slots:</h6>
+                <h6 className='teritoryFont'>Booked Slots:</h6>
                 <ul className="list-unstyled">
                   {bookedslotsbydate.length > 0 ? (
                     bookedslotsbydate.map((slot, index) => (
                       <li key={index}>
                         <button
                           type="button"
-                          className="btn btn-secondary btn-sm m-1"
+                          className="btn btn-secondary btn-sm "
                           disabled
                         >
                           {convertSlotToTimeRange(slot)} {/* Format if needed */}
@@ -264,7 +267,7 @@ const convertSlotToTimeRange = (slot) => {
                       </li>
                     ))
                   ) : (
-                    <li>No booked slots</li>
+                    <li className='teritoryFont'>No booked slots</li>
                   )}
                 </ul>
               </div>
@@ -276,14 +279,14 @@ const convertSlotToTimeRange = (slot) => {
 
 
           {/* Ground Details Card */}
-          <div className="col-md-4 groundviewcard">
-            <div className="card">
+          <div className="col-md-4 groundviewcard ">
+            <div className="card shadow-lg border-0 rounded secondaryColor viewcardFont">
               <button variant="primary" className="btn btn-primary" onClick={confirnnowClick}>Confirm Now</button>
               <img src={imageUrl} className="card-img-top ground-image img-fluid mb-3" alt={name || 'Ground Image'} />
               <div className="card-body">
                 <h5 className="card-title">{name || 'No Name'}</h5>
-                <h6 className="card-subtitle mb-2 text-muted">Location: {location || 'No Location'}</h6>
-                <p className="card-text">{description}</p>
+                <h6 className="card-subtitle mb-2 viewcardFont">Location: {location || 'No Location'}</h6>
+                <p className="card-text viewcardFont">{description}</p>
               </div>
             </div>
           </div>

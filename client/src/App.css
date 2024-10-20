@@ -1,13 +1,17 @@
 /* Basic reset */
+/****** 00FF9C  , 091057 *** #006849 **/
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 :root {
-  --primary-color:  #091057;
+  --primary-color:  #006849 ;   
   --secondary-color: #fff;
-  --teritary-color: #fff;
+  --teritary-color: #091057;
+  --primary-font : #fff;
+  --secondary-font : #000;
+  --teritory-font : #fff;
 }
 
 
@@ -93,12 +97,40 @@ body {
 .primaryColor{
   background-color: var(--secondary-color)!important;
 }
-.cardsection{
+/* .cardsection{
+  background-color: var(--teritary-color);
+} */
+.primaryFont{
+  color: var(--primary-font);
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 40px;
+
+}
+.viewcardFont{
+  color: var(--primary-font)!important;
+}
+.teritoryColor{
   background-color: var(--teritary-color);
 }
+.teritoryFont{
+  color: var(--teritory-font) !important;
+}
+span .secondaryFont{
+  color : var(--secondary-font);
+}
 /* Ensure the columns are displayed side by side on desktop */
-
-@media (min-width: 768px) {
+.card-title {
+  white-space: nowrap; /* Prevent the text from wrapping */
+  overflow: hidden;    /* Hide the overflowed text */
+  text-overflow: ellipsis; /* Add the ellipsis (...) */
+  max-width: 100%;     /* Set a maximum width for the element */
+}
+.confirmbtn{
+  width: 80%!important;
+  
+}
+/* @media (min-width: 768px) {
   body{
     font-size: 16px;
     line-height: 1.6;
@@ -108,17 +140,20 @@ body {
     flex-direction: column;
     align-items: center;
   }
-}
+} */
 
 /* Tablet styles */
 @media (min-width: 768px) {
+  .mobileconfirmnow{
+    display: none!important;
+  }
   body{
     font-size: 16px;
     line-height: 1.6;
   }
-  .viewgroundsection {
+  /* .viewgroundsection {
       padding: 2rem;
-  }
+  } */
 
   .ground-image {
       width: 90%;
@@ -138,16 +173,34 @@ body {
   }
 }
 .groundImgsize{
-  width: 10rem;
-  height: 10rem;
+  width: 8rem;
+  height: 8rem;
+}
+.webheading{
+  font-size: 42px!important;
+  line-height: 42px!important;
+  color: var(--primary-font)!important;
+}
+/*****Mobiles*******/
+@media (max-width:767){
+  .webheading{
+    font-size: 42px!important;
+    line-height: 42px!important;
+    color: var(--primary-font)!important;
+  }
 }
 /* Desktop styles */
 @media (min-width: 992px) {
+  .mobileconfirmnow{
+    display: none!important;
+  }
   .ground-image {
       width: 80%;
   }
   .webheading{
-    font-size: 4rem !important;
+    font-size: 42px;
+    line-height: 42px;
+    color: var(--primary-font);
   }
 
   .available-slots,
