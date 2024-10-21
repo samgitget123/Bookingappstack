@@ -110,21 +110,21 @@ const Herosection = () => {
     
   return (
     <>
-      <section className=' text-dark  primaryColor' style={{minHeight:'50vh'}}>
+      <section className=' text-dark  primaryColor'>
         <div className="container-fluid">
           <div className=" d-sm-flex justify-content-evenly  my-3">
             <div className='row'>
-              <div className="col-lg-7 justify-content-center">
-                <img className='img-fluid  w-80 mt-md-3' src={display} alt="image" />
+              <div className="col-lg-7 justify-content-center  ">
+                <img className='img-fluid  w-80 mt-md-3 ' src={display} alt="image" />
               </div>
               <div className="col-lg-5 secondaryColor">
                 <div className='d-flex align-items-center justify-content-center text-center'>
                   <div className='mt-sm-5'>
-                    <div className='mb-3 d-none d-sm-block mb-sm-5'>
-                      <img className='img-fluid w-50 ' class='rotateImage'   src={brandlogo} alt="logo" />
+                    <div className='mb-3 d-none d-sm-block mb-sm-5 '>
+                      <img className='img-fluid w-50 rotateImage'    src={brandlogo} alt="logo" />
                     </div>
-                    <h4 className='my-2 primaryFont'>Choose Your <span className='secondaryFont'>Ground</span></h4>
-                    <form role="search" onSubmit={(e) => e.preventDefault()}>
+                    <h4 className='my-3  herofont'>Choose Your <span className='spanfont'>Ground</span></h4>
+                    <form role="search" onSubmit={(e) => e.preventDefault()} >
                       <select
                         className="form-control my-3"
                         value={selectedCity || city}
@@ -147,13 +147,13 @@ const Herosection = () => {
                         ))}
                       </select>
                     </form>
-                    <div className='my-3'>
+                    <div>
                       <button className="btn btn-primary my-3 " onClick={requestLocationAccess}>
                         Use Current Location
                       </button>
                     </div>
-                    <div className='my-5'>
-                      <h4 className='webheading'>Find Grounds <span className='webheading'>@ Your Nearest</span></h4>
+                    <div className='my-sm-5'>
+                      <h4 className='webheading'>Find Grounds <span className='webheading2'> @ Your Nearest</span></h4>
                     </div>
                   </div>
                 </div>

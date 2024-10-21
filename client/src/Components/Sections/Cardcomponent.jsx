@@ -58,10 +58,10 @@ const CardComponent = ({ grounds }) => {
         {currentCards && currentCards.length > 0 ? (
           currentCards.map((playground, index) => (
             <div className="col-lg-3 col-md-6 col-sm-12" key={index}>
-              <div className="card h-80 shadow-lg border-0 rounded" onClick={() => handleCardClick(playground.ground_id)}>
+              <div className="card h-50 shadow-lg border-0 rounded" onClick={() => handleCardClick(playground.ground_id)}>
                 <img src={groundImage} className="card-img-top img-fluid groundImgsize" alt={playground.data.name} />
-                <div className="card-body teritoryColor "> 
-                  <h4 className="card-title teritoryFont">{playground.data.name}</h4>
+                <div className="card-body secondaryColor"> 
+                  <h4 className="card-title teritoryFont cardheadfont">{playground.data.name}</h4>
                   <p className="card-text  teritoryFont">
                     Location: {playground.data.location}
                   </p>
@@ -81,14 +81,14 @@ const CardComponent = ({ grounds }) => {
         <div className="row justify-content-center mt-4">
           <div className="col-md-6 d-flex justify-content-between">
             <button
-              className="btn btn-sm  secondaryColor primaryFont"
+              className="btn btn-sm  secondaryColor teritoryFont"
               onClick={handlePrev}
               disabled={currentPage === 1}
             >
               Previous
             </button>
             <button
-              className="btn btn-sm  secondaryColor primaryFont"
+              className="btn btn-sm  secondaryColor teritoryFont"
               onClick={handleNext}
               disabled={currentPage === totalPages}
             >

@@ -1,17 +1,20 @@
 /* Basic reset */
-/****** 00FF9C  , 091057 *** #006849 **/
+/****** 00FF9C  , 091057 *** #006849
+#001827  secondary green
+**/
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 :root {
-  --primary-color:  #006849 ;   
-  --secondary-color: #fff;
-  --teritary-color: #091057;
+  --primary-color:  #006849 ;    /*****primary green color********/ 
+  --secondary-color: #fff;      /******secondary common white color*******/
+  --teritary-color: #091057;    /*********territory light blue color optional ****/
   --primary-font : #fff;
   --secondary-font : #000;
   --teritory-font : #fff;
+  --special-color : #00EE64 
 }
 
 
@@ -21,6 +24,26 @@ body {
   font-size: 14px;
   line-height: 1.5;
   font-weight: 400;
+}
+.sectionheight{
+  height: 50vh!important;
+}
+.cardheadfont{
+  font-size: 18px!important;
+  color: var(--teritory-font)!important;
+  line-height: 22px!important;
+}
+.herofont{
+  font-size: 28px!important;
+  color: var(--teritory-font)!important;
+  line-height: 22px!important;
+  font-weight: 12px!important;
+}
+.spanfont{
+  font-size: 32px!important;
+  color: var( --special-color)!important;
+  line-height: 22px!important;
+  font-weight: 22px!important;
 }
 .listbox{
   max-width: 150px;
@@ -86,7 +109,7 @@ body {
 }
 .rotateImage{
   animation: rotate 20s infinite linear; /* 5 seconds for full rotation, infinitely repeating */
-  width: 200px; /* Adjust width as needed */
+  width: 250px; /* Adjust width as needed */
   height: auto; /* Maintain aspect ratio */
 }
 
@@ -107,6 +130,7 @@ body {
   line-height: 40px;
 
 }
+
 .viewcardFont{
   color: var(--primary-font)!important;
 }
@@ -158,7 +182,8 @@ span .secondaryFont{
       background-image: url('./Images/bgcrick.jpg');
       background-repeat: no-repeat; /* Prevent the background from repeating */
       background-position: top right; /* Position the background at the top right */
-      background-size: cover; /* Ensure the background covers the entire section */
+      background-size: cover; /* Ensures the image covers the entire section */
+      height: 100vh; /* Full viewport height */
       
   }
 
@@ -187,6 +212,14 @@ span .secondaryFont{
   font-size: 42px!important;
   line-height: 42px!important;
   color: var(--primary-font)!important;
+  text-align: center!important;
+  color: var( --special-color)!important;
+}
+.webheading2{
+  font-size: 42px!important;
+  line-height: 42px!important;
+  color: var(--primary-font)!important;
+  text-align: center;
 }
 /*****Mobiles*******/
 @media (max-width:767){
@@ -194,6 +227,13 @@ span .secondaryFont{
     font-size: 42px!important;
     line-height: 42px!important;
     color: var(--primary-font)!important;
+  }
+  .primaryFont{
+    color: var(--primary-font);
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 32px;
+  
   }
 }
 /* Desktop styles */
