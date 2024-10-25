@@ -19,13 +19,11 @@ const App = () => {
       <Router>
         <Header /> {/* Placed outside of <main> so that header appears on all pages */}
         <main>
-          <Container fluid> {/* Wrap the main content */}
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/viewground/:gid" element={<ViewGround />} />
               <Route path="/payment/:gid" element={<Payment />} />
             </Routes>
-          </Container>
         </main>
       </Router>
     </Provider>

@@ -33,6 +33,9 @@ body {
   color: var(--teritory-font)!important;
   line-height: 22px!important;
 }
+.viewcardbg{
+  background-color: #CBD2A4!important;
+}
 .herofont{
   font-size: 28px!important;
   color: var(--teritory-font)!important;
@@ -151,7 +154,10 @@ span .secondaryFont{
   max-width: 100%;     /* Set a maximum width for the element */
 }
 .availablebtn{
-  font-size: 12px!important;
+  font-size: 10px!important;
+  width: 120px!important; /* Set to desired width */
+  text-align: center!important;
+  font-weight: 500!important;
 }
 .confirmbtn{
   width: 80%!important;

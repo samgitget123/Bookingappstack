@@ -317,92 +317,100 @@ const ViewGround = () => {
     return `${startHour}:${startMinutes} ${period} - ${endHour}:${endMinutes} ${endPeriod}`;
   };
   return (
-    <section className=' my-2 '>
-      <div className="container-fluid">
+    <section >
+      <div className="container mt-3">
+        <div className="row">
+          <div className="col-lg-8 col-md-12 col-sm-12">
+            <div>
+              <DatePicker
+              className='w-100'
+                selected={selectedDate}
+                onChange={(date) => {
+                  if (date) {
+                    setSelectedDate(date);
+                    fetchGroundDetailsWithDate(formatDate(date));
+                  }
+                }}
+                dateFormat="MMMM d, yyyy"
+                className="form-control"
+              />
+            </div>
+          </div>
+        </div>
         <div>
-          <DatePicker
-            selected={selectedDate}
-            onChange={(date) => {
-              if (date) {
-                setSelectedDate(date);
-                fetchGroundDetailsWithDate(formatDate(date));
-              }
-            }}
-            dateFormat="MMMM d, yyyy"
-            className="form-control"
-          />
-
           <p><strong>Selected Date: </strong>{formatDate(selectedDate)}</p>
         </div>
-      
-          {/* Available Slots Section */}
-          <div className='mobileconfirmnow d-sm-none d-flex justify-content-center mt-3'>
-            <button variant="primary" className="btn btn-primary confirmbtn" onClick={confirnnowClick}>Confirm Now</button>
-          </div>
+      </div>
+      <div className="container-fluid viewcardbg pt-3">
+        {/* Available Slots Section */}
+        <div className='mobileconfirmnow d-sm-none d-flex justify-content-center mt-3'>
+          <button variant="primary" className="btn btn-primary confirmbtn" onClick={confirnnowClick}>Confirm Now</button>
+        </div>
 
-          <div className='d-flex justify-content-evenly text-center pt-3'>
-            <div className="row">
-              <div className="col-lg-8 col-sm-6">
-                <div className="d-flex justify-content-evenly">
-                  <div className='col-lg-4'>
-                    <h6 className='teritoryFont text-dark'>Available Slots:</h6>
-                    <ul className="list-unstyled d-flex flex-wrap flex-column flex-sm-row">
-                      {availableSlots.length > 0 ? (
-                        availableSlots.map((slot, index) => (
-                          <li key={index} className='listbox mb-1'>
-                            <button
-                              className={`btn ${selectedSlots.includes(slot) ? 'btn-success' : 'btn-primary'} btn-sm availablebtn`}
-                              onClick={() => handleSlotClick(slot)}
-                            >
-                              {convertSlotToTimeRange(slot)}
-                            </button>
-                          </li>
-                        ))
-                      ) : (
-                        <li className='teritoryFont'>No available slots</li>
-                      )}
-                    </ul>
-                  </div>
-                  <div className='col-lg-4'>
-                    <h6 className='text-dark'>Booked Slots:</h6>
-                    <ul className="list-unstyled d-flex flex-wrap flex-column flex-sm-row">
-                  {bookedslotsbydate.length > 0 ? (
-                    bookedslotsbydate.map((slot, index) => (
-                      <li key={index}  className='listbox mb-1'>
-                        <button
-                          type="button"
-                          className="btn btn-secondary btn-sm "
-                          disabled
-                        >
-                          {convertSlotToTimeRange(slot)} {/* Format if needed */}
-                        </button>
-                      </li>
-                    ))
-                  ) : (
-                    <li className='teritoryFont'>No booked slots</li>
-                  )}
-                </ul>
-                
-                  </div>
+        <div className='d-flex text-center pt-3 '>
+          <div className="row">
+            <div className="col-lg-8 col-sm-6">
+              <div className=" d-flex justify-content-center  secondaryColor">
+                <div className='col-lg-4'>
+                  <h6 className='teritoryFont text-light mt-3'>Available Slots:</h6>
+                  <ul className="list-unstyled d-flex flex-wrap flex-column flex-sm-row">
+                    {availableSlots.length > 0 ? (
+                      availableSlots.map((slot, index) => (
+                        <li key={index} className='listbox m-1'>
+                          <button
+                            className={`btn ${selectedSlots.includes(slot) ? 'btn-success' : 'btn-primary'} btn-sm availablebtn`}
+                            onClick={() => handleSlotClick(slot)}
+                          >
+                            {convertSlotToTimeRange(slot)}
+                          </button>
+                        </li>
+                      ))
+                    ) : (
+                      <li className='teritoryFont'>No available slots</li>
+                    )}
+                  </ul>
                 </div>
-              </div>
-              <div className="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-xlg-6 g-0 secondaryColor rounded">
-                <div className="card shadow-lg border-0 rounded secondaryColor viewcardFont">
-                  <div className='mobileconfirmnow  d-flex justify-content-center mt-3'>
-                    <button variant="primary" className="btn btn-primary confirmbtn" onClick={confirnnowClick}>Confirm Now</button>
-                  </div>
-                  <img src={imageUrl} className="card-img-top ground-image img-fluid mb-3" alt={name || 'Ground Image'} />
-                  <div className="card-body">
-                    <h5 className="card-title">{name || 'No Name'}</h5>
-                    <h6 className="card-subtitle mb-2 viewcardFont">Location: {location || 'No Location'}</h6>
-                    <p className="card-text viewcardFont">{description}</p>
-                  </div>
+                <div className='col-lg-4 text-center'>
+                  <h6 className='text-light mt-3'>Booked Slots:</h6>
+                  <ul className="list-unstyled d-flex flex-wrap flex-column flex-sm-row">
+                    {bookedslotsbydate.length > 0 ? (
+                      bookedslotsbydate.map((slot, index) => (
+                        <li key={index} className='listbox m-1 text-center'>
+                          <button
+                            type="button"
+                            className="btn btn-secondary btn-sm availablebtn"
+                            disabled
+                          >
+                            {convertSlotToTimeRange(slot)} {/* Format if needed */}
+                          </button>
+                        </li>
+                      ))
+                    ) : (
+                      <li className='text-dark text-center'>No booked slots</li>
+                    )}
+                  </ul>
+
                 </div>
               </div>
             </div>
-          </div>
+            <div className="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-xlg-6 g-0  ">
+              <div className="card shadow-lg border-0 mt-3 w-80 rounded secondaryColor viewcardFont">
+                <div className='mobileconfirmnow  d-flex justify-content-center mt-3'>
+                  <button variant="primary" className="btn btn-primary confirmbtn" onClick={confirnnowClick}>Confirm Now</button>
+                </div>
+                <img src={imageUrl} className="card-img-top ground-image img-fluid mb-3" alt={name || 'Ground Image'} />
+                <div className="card-body">
+                  <h5 className="card-title">{name || 'No Name'}</h5>
+                  <h6 className="card-subtitle mb-2 viewcardFont">Location: {location || 'No Location'}</h6>
+                  <p className="card-text viewcardFont">{description}</p>
+                </div>
+              </div>
 
-        
+            </div>
+          </div>
+        </div>
+
+
 
 
 
