@@ -42,6 +42,8 @@ const Herosection = () => {
       );
 
       const city = response.data.address.city || response.data.address.town || response.data.address.village;
+      const locationcity = response.data;
+      console.log('uselocationcity' , locationcity)
       dispatch(fetchPlaygrounds(city));
       setCity(city);
     } catch (error) {
