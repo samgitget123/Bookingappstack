@@ -31,6 +31,20 @@ app.use('/', groundRoutes); // Routes for ground management
 const bookingRoutes = require('./routes/bookingRoutes'); // Adjust the path as needed
 app.use('/', bookingRoutes); // Routes for booking management
 
+// Serve static files in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'client/build')));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
+
+// Error handling for unhandled routes
+app.use((req, res, next) => {
+  res.status(404).json({ message: 'Route not found' });
+});
+
 // Set the port to listen on
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
